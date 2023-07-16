@@ -103,7 +103,7 @@ const divideOnStrings = (str1, str2) =>{
         let partialDivision = ~~(parseInt(partialDividend)/parseInt(partialDivisor))
         let partialRest = parseInt(partialDividend)%parseInt(partialDivisor)
         let isValidValue = false;
-        let nau;
+        let nextCarriedDividend;
         while(!isValidValue){
             isValidValue = true
             nextCarriedDividend = partialRest.toString() //it can be as big as str2, so it should be a string too
@@ -123,4 +123,3 @@ const divideOnStrings = (str1, str2) =>{
     }
     return trimLeadingZeros(result)
 }
-
