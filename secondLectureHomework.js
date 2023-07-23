@@ -53,58 +53,41 @@ class ConversionFollower {
         this.value = value
         this.name = name
     }
+    convertToString(){
+        console.log("Converting "+ this.name + " to string with value:")
+        const result = this.value?this.value.toString():String(this.value)
+        console.log(result)
+        return result
+    }
+    convertToPrimitive(){
+        console.log("Converting "+ this.name + " to primitive with value:")
+        const result = this.value?this.value.valueOf():this.value
+        console.log(result)
+        return result
+    }
     [Symbol.toPrimitive](hint) {
         if(typeof this.value==='string' && hint==='default'){
             hint='string'
         }
+        console.log(this.name + " will be converted to " + hint + " before operating")
         if (hint === 'string') {
-            console.log("Converting "+ this.name + " to string with value:")
-            let result = this.value?this.value.toString():String(this.value)
-            console.log(result)
+            let result = this.convertToString()
             if(isPrimitive(result)){
                 return result
             }
-            console.log("Converting primitive of "+ this.name + " to number with values:")
-            result = this.value?this.value.valueOf():this.value
-            console.log("Primitive value:")
-            console.log(result)
+            result = this.convertToPrimitive()
             if(isPrimitive(result)){
-                console.log("Number value:")
-                console.log(Number(result))
-                return Number(result)
+                return result
             }
             console.log("Primitive value is of type Object")
             throw TypeError("Couldn't convert "+this.name+" to proper type")
         }
-        if(hint==='number'){
-            console.log("Converting primitive of "+ this.name + " to number with values:")
-            let result = Number(this.value?this.value.valueOf():this.value)
-            console.log("Primitive value:")
-            console.log(result)
-            if(isPrimitive(result)){
-                console.log("Number value:")
-                console.log(result)
-                return result
-            }
-            console.log("Primitive value is of type Object")
-            console.log("Converting "+ this.name + " to string with value:")
-            result = this.value?this.value.toString():String(this.value)
-            console.log(result)
-            if(isPrimitive(result)){
-                return result
-            }
-            throw TypeError("Couldn't convert "+this.name+" to proper type")
-        }
-        console.log("Converting "+ this.name + " to primitive with value:")
-        let result = this.value?this.value.valueOf():this.value
-        console.log(result)
+        let result = this.convertToPrimitive()
         if(isPrimitive(result)){
             return result
         }
         console.log("Primitive value is of type Object")
-        console.log("Converting "+ this.name + " to string with value:")
-        result = this.value?this.value.toString():String(this.value)
-        console.log(result)
+        result = this.convertToString()
         if(isPrimitive(result)){
             return result
         }
