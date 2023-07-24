@@ -1,19 +1,19 @@
 const isPrimitive = (value) =>{
-    return Object(value) !== value ;
+    return Object(value) !== value 
 }
 
 const canBeAdded = (value) =>{
     if(value === null || value === undefined){
-        return false;
+        return false
     }
-    return isPrimitive(value) ;
+    return isPrimitive(value)
 }
 
 const addValues = (value1, value2) =>{
     if(!canBeAdded(value1) || !canBeAdded(value2)){
         throw new TypeError("Cannot add values of type " + typeof value1 + " and " + typeof value2)
     }
-    return value1 + value2;
+    return value1 + value2
 }
 
 const stringifyValue = (value) =>{
@@ -22,13 +22,13 @@ const stringifyValue = (value) =>{
 
 const invertBoolean = (bValue) =>{
     if(typeof bValue === 'boolean'){
-        return !bValue;
+        return !bValue
     }
     throw new TypeError("Cannot invert non-boolean type " + typeof bValue)
 }
 
 const convertToNumber = (value) =>{
-    let result;
+    let result
     if(typeof value === 'string'){
         result = parseInt(value)
     }else{
@@ -41,7 +41,7 @@ const convertToNumber = (value) =>{
 }
 
 const coerceToType = (value, newType) =>{
-    const types = {string:String,number:Number, bigint:BigInt, boolean:Boolean, symbol:Symbol, object:Object}
+    const types = {string:stringifyValue,number:convertToNumber, bigint:BigInt, boolean:Boolean, symbol:Symbol, object:Object}
     if(types[newType]){
         return types[newType](value)
     }
@@ -70,6 +70,9 @@ class ConversionFollower {
             hint='string'
         }
         console.log(this.name + " will be converted to " + hint + " before operating")
+        if(isPrimitive(this.value)){
+            return this.value
+        }
         if (hint === 'string') {
             let result = this.convertToString()
             if(isPrimitive(result)){
