@@ -6,6 +6,9 @@ const discountPrice = (price, percentage) =>{
     return price*percentage/100
 }
 const calculateDiscountedPrice = (products, discount) => {
+    if(!Array.isArray(products) || typeof discount !== "number"){
+        throw new TypeError("Arguments should be of type (array, number)")
+    }
     return products.map(product => {
         const productCopy = {...product}
         productCopy.price = discountPrice(productCopy.price, discount)
@@ -13,22 +16,29 @@ const calculateDiscountedPrice = (products, discount) => {
     })
 } 
 const calculateTotalPrice = (products) =>{
+    if(!Array.isArray(products)){
+        throw new TypeError("Argument is not an array")
+    }
     return totalSum(products, (product) => product.price)
 }
 //task 2
 const getFullName = (person) =>{
+    if(!person || typeof person.firstName !== "string" || typeof person.lastName !== "string"){
+        throw new TypeError("Argument is not a valid person object")
+    }
     return capitalizeFirstLetter(person.firstName) + " " + capitalizeFirstLetter(person.lastName)
 }
-
 const capitalizeFirstLetter = (name) =>{
     return name[0].toUpperCase() + name.slice(1)
 }
-
 const compose = (...functions) =>{
     return (value) => functions.reduce((partialResult, nextFunction) => nextFunction(partialResult), value)
 }
 
 const filterUniqueWords = (words) =>{
+    if(typeof words !== "string"){
+        throw new TypeError("Argument is not a string")
+    }
     return compose(onlyFilter, onlySort)(words)
 }
 
@@ -38,12 +48,14 @@ const onlyFilter = (words) =>{
 }
 const onlySort = (words) => words.sort()
 
-
 const calculateStudentAverageGrade = (grades) =>{
     return totalSum(grades)/grades.length
 }
 
 const getAverageGrade = (students) =>{
+    if(!Array.isArray(students)){
+        throw new TypeError("Argument is not an array")
+    }
     return totalSum(students, (student) => calculateStudentAverageGrade(student.grades))/students.length
 }
 //task 3
@@ -55,6 +67,9 @@ const createCounter = () =>{
 }
 
 const repeatFunction = (repeatableFunc, times) =>{
+    if(typeof repeatableFunc !== "function" || typeof times !== "number"){
+        throw new TypeError("Arguments should be of type (function, number)")
+    }
     return () =>{
         const timesCounter = createCounter();
         ;(function repeat(){
@@ -67,33 +82,41 @@ const repeatFunction = (repeatableFunc, times) =>{
 }
 //task 4
 const factorial = (n) =>{
-    return factorialWithStackReset(n,1n)
+    if(typeof n !== "number"){
+        throw new TypeError("Argument is not a number")
+    }
+    return factorialWithStackReset(n,1)
 }
-const MAXREP = 1000n
+const MAXREP = 1000
 const factorialWithStackReset = (n,accumulated) =>{
     function recursiveFactorial(repetitions){
-        if(n-repetitions<=1n){
-            return 1n
+        if(n-repetitions<=1){
+            return 1
         }
         if(repetitions>MAXREP){
             return n-repetitions
         }
-        return (n-repetitions) * recursiveFactorial(repetitions+1n)
+        return (n-repetitions) * recursiveFactorial(repetitions+1)
     }
-    const result = recursiveFactorial(0n) * accumulated
-    return n<MAXREP?result:factorialWithStackReset(n-(MAXREP+1n),result)
+    const result = recursiveFactorial(0) * accumulated
+    return n<MAXREP?result:factorialWithStackReset(n-(MAXREP+1),result)
 }
 
 const power = (base, exponent) =>{
+    if(typeof base !== "number" || typeof exponent !== "number"){
+        throw new TypeError("Arguments should be of type (number, number)")
+    }
     if(exponent === 0){
         return 1
     }
     return base * power(base, exponent-1)
 }
-
 //task 5
 
 function lazyMap(array, mapFunction){
+    if(!Array.isArray(array) || typeof mapFunction !== "function"){
+        throw new TypeError("Arguments should be of type (array, function)")
+    }
     const counter = createCounter()
     return {
         next: () =>{
@@ -105,7 +128,6 @@ function lazyMap(array, mapFunction){
         }
     }
 }
-
 const lazyFibonacci = () =>{
     let last = 0
     let current = 0
