@@ -3,7 +3,7 @@ const totalSum = (values, modifier = (value) => value) =>{
 }
 //task 1
 const discountPrice = (price, percentage) =>{
-    return price*percentage/100
+    return price - price*percentage/100
 }
 const calculateDiscountedPrice = (products, discount) => {
     if(!Array.isArray(products) || typeof discount !== "number"){
@@ -22,18 +22,26 @@ const calculateTotalPrice = (products) =>{
     return totalSum(products, (product) => product.price)
 }
 //task 2
+const capitalizeFirstLetter = (name) =>{
+    return name[0].toUpperCase() + name.slice(1)
+}
+
 const getFullName = (person) =>{
     if(!person || typeof person.firstName !== "string" || typeof person.lastName !== "string"){
         throw new TypeError("Argument is not a valid person object")
     }
     return capitalizeFirstLetter(person.firstName) + " " + capitalizeFirstLetter(person.lastName)
 }
-const capitalizeFirstLetter = (name) =>{
-    return name[0].toUpperCase() + name.slice(1)
-}
+
 const compose = (...functions) =>{
     return (value) => functions.reduce((partialResult, nextFunction) => nextFunction(partialResult), value)
 }
+
+const onlyFilter = (words) =>{
+    const result = words.toLowerCase().split(" ")
+    return words.split(" ").filter((word, index) => result.indexOf(word.toLowerCase()) === index)
+}
+const onlySort = (words) => words.sort()
 
 const filterUniqueWords = (words) =>{
     if(typeof words !== "string"){
@@ -41,12 +49,6 @@ const filterUniqueWords = (words) =>{
     }
     return compose(onlyFilter, onlySort)(words)
 }
-
-const onlyFilter = (words) =>{
-    const filteredWords = new Set(words.split(" "))
-    return Array.from(filteredWords)
-}
-const onlySort = (words) => words.sort()
 
 const calculateStudentAverageGrade = (grades) =>{
     return totalSum(grades)/grades.length
@@ -81,12 +83,6 @@ const repeatFunction = (repeatableFunc, times) =>{
     }
 }
 //task 4
-const factorial = (n) =>{
-    if(typeof n !== "number"){
-        throw new TypeError("Argument is not a number")
-    }
-    return factorialWithStackReset(n,1)
-}
 const MAXREP = 1000
 const factorialWithStackReset = (n,accumulated) =>{
     function recursiveFactorial(repetitions){
@@ -101,6 +97,13 @@ const factorialWithStackReset = (n,accumulated) =>{
     const result = recursiveFactorial(0) * accumulated
     return n<MAXREP?result:factorialWithStackReset(n-(MAXREP+1),result)
 }
+const factorial = (n) =>{
+    if(typeof n !== "number"){
+        throw new TypeError("Argument is not a number")
+    }
+    return factorialWithStackReset(n,1)
+}
+
 
 const power = (base, exponent) =>{
     if(typeof base !== "number" || typeof exponent !== "number"){
