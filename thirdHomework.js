@@ -37,9 +37,13 @@ const compose = (...functions) =>{
     return (value) => functions.reduce((partialResult, nextFunction) => nextFunction(partialResult), value)
 }
 
+const toLowerCaseAndSplit = (words) => words.toLowerCase().split(" ")
+
+const removeNonWords = (words) => words.filter((word) => word.replace(/\W/g, ''))
+
 const onlyFilter = (words) =>{
-    const result = words.toLowerCase().split(" ")
-    return words.split(" ").filter((word, index) => result.indexOf(word.toLowerCase()) === index)
+    const result = new Set(words)
+    return Array.from(result)
 }
 const onlySort = (words) => words.sort((a,b) =>a.toLowerCase().localeCompare(b.toLowerCase()))
 
@@ -47,7 +51,7 @@ const filterUniqueWords = (words) =>{
     if(typeof words !== "string"){
         throw new TypeError("Argument is not a string")
     }
-    return compose(onlyFilter, onlySort)(words)
+    return compose(toLowerCaseAndSplit, removeNonWords, onlyFilter, onlySort)(words)
 }
 
 const calculateStudentAverageGrade = (grades) =>{
