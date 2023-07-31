@@ -41,7 +41,7 @@ const onlyFilter = (words) =>{
     const result = words.toLowerCase().split(" ")
     return words.split(" ").filter((word, index) => result.indexOf(word.toLowerCase()) === index)
 }
-const onlySort = (words) => words.sort()
+const onlySort = (words) => words.sort((a,b) =>a.toLowerCase().localeCompare(b.toLowerCase()))
 
 const filterUniqueWords = (words) =>{
     if(typeof words !== "string"){
