@@ -8,12 +8,10 @@ const customFilterUnique = (array, callback) => {
             uniques.set(uniqueIdentifier, element)
         }
     })
-    array.length = 0
-    array.push(...uniques.values())
+    return [...uniques.values()]
 }
 const arr = [{name: "John", age: 30}, {name: "Jane", age: 30}, {name: "John", age: 30}]
-customFilterUnique(arr, (element) => element.name)
-
+const arrFiltered = customFilterUnique(arr, (element) => element.name)
 //task 2
 const chunkArrayUnoptimized = (array, chunkSize) => {
     if(chunkSize <= 0) throw new Error("Chunk size must be greater than 0")
@@ -22,8 +20,7 @@ const chunkArrayUnoptimized = (array, chunkSize) => {
     for(let i = 0; i < array.length; i+=chunkSize){
         chunkedArray.push(array.slice(i, i + chunkSize))
     }
-    array.length = 0
-    array.push(...chunkedArray)
+    return chunkedArray;
 }
 
 const chunkArray = (array, chunkSize) => {
@@ -87,6 +84,7 @@ const measureArrayPerformance = (callback, array) => {
     const end = process.hrtime.bigint()
     return end - start
 }
+
 /* ----- More accurate but slower -----
 const measureAveragePerformance = (funcToMeasure) =>{
     const measuredTime = []
