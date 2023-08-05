@@ -4,10 +4,10 @@ lastName: "Doe",
 age: 30,
 email: "john.doe@example.com"}
 Object.defineProperties(person, {
-    firstName: {writable: false},
-    lastName: {writable: false},
-    age: {writable: false},
-    email: {writable: false}
+    firstName: {writable: false, configurable: false},
+    lastName: {writable: false, configurable: false},
+    age: {writable: false, configurable: false},
+    email: {writable: false, configurable: false}
 })
 person.updateInfo= function(info) {
     for(let key in info){
@@ -78,7 +78,7 @@ const _deepCloneObject = (object, propertyModifier,cache) =>{
 }
 //task 4
 const createImmutableObject = (object) =>{
-    const immutableObject = deepCloneObject(object, (value)=>{return {value: value, writable: false, enumerable: true, configurable: true}})
+    const immutableObject = deepCloneObject(object, (value)=>{return {value: value, writable: false, enumerable: true, configurable: false}})
     return immutableObject
 }
 const immutablePerson = createImmutableObject(person)
@@ -86,17 +86,18 @@ const immutablePerson = createImmutableObject(person)
 //task 5
 const observeObject = (object, callback) =>{
     if(typeof object !== "object" || typeof callback !== "function") throw new TypeError("Arguments should be of type (object, function)")
-    const handler = {
-        get(target, property){
-            callback(property, "get")
-            return target[property]
-        },
-        set(target, property, value){
-            callback(property, "set")
-            target[property] = value
-        }
+    const observedObject = {}
+    for(let key in object){
+        Object.defineProperty(observedObject, key, 
+            {get:() =>{
+                callback(key,"get")
+                return object[key]},
+            set:(newValue)=>{
+                callback(key,"set")
+                object[key] = newValue
+            }})
     }
-    return new Proxy(object, handler)
+    return observedObject;
 }
 const observedPerson = observeObject(person, (property, action) =>{ console.log(property, action)})
 //task 7
