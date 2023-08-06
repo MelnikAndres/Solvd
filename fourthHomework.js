@@ -12,7 +12,10 @@ Object.defineProperties(person, {
 person.updateInfo= function(info) {
     for(let key in info){
         if(this.hasOwnProperty(key)){
-            this[key] = info[key]
+            const propertyDescriptor = Object.getOwnPropertyDescriptor(this, key)
+            if(propertyDescriptor.writable && propertyDescriptor.configurable){
+                this[key] = info[key]
+            }
         }
     }
 }
