@@ -36,17 +36,19 @@ const multiline = (strings, ...expressions) => {
     return expressions.reduceRight((accum, actual, i) => `${strings[i]}${actual}${accum}`, strings[strings.length - 1])
 }
 
-const debounce = (fn, milliseconds) => {
+const debounce = (func, interval) => {
+    if (typeof func !== "function" || typeof interval !== "number") throw new TypeError("Arguments should be of type (function, number)")
     let timeout;
     return (...args) => {
         clearTimeout(timeout)
         timeout = setTimeout(() => {
-            fn(...args)
-        }, milliseconds);
+            func(...args)
+        }, interval);
     }
 }
 
 const throttle = (func, interval) => {
+    if (typeof func !== "function" || typeof interval !== "number") throw new TypeError("Arguments should be of type (function, number)")
     let waiting = false;
     return (...args) => {
         if (waiting) {
@@ -60,11 +62,12 @@ const throttle = (func, interval) => {
     }
 }
 
-const curry = (func, arity) =>{
+const curry = (func, arity) => {
+    if (typeof func !== "function" || typeof arity !== "number") throw new TypeError("Arguments should be of type (function, number)")
     const args = []
-    function curried(x){
-        args.push(x==="_"?undefined:x)
-        if(args.length >= arity){
+    function curried(x) {
+        args.push(x === "_" ? undefined : x)
+        if (args.length >= arity) {
             return func(...args)
         }
         return curried
