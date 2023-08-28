@@ -49,31 +49,38 @@ const defineStyle = (element, bubbleValue,value,count,countOnRed) => {
 const drawTable = (data,tableId,countOnRed=false) => {
     const table = document.getElementById(tableId)
     table.appendChild(createHeader())
-    const rows = []
-    for(let i = 0; i< data.mergeSort.length; i++){
-        let count = 0
-        const row = document.createElement("tr")
-        const length = document.createElement("td")
-        length.innerHTML = data.length[i]
-        row.appendChild(length)
-        const bubble = document.createElement("td")
-        bubble.innerHTML = data.bubbleSort[i].toFixed(6)
-        row.appendChild(bubble)
-        const merge = document.createElement("td")
-        merge.innerHTML = data.mergeSort[i].toFixed(6)
-        count = defineStyle(merge,data.bubbleSort[i].toFixed(6),data.mergeSort[i].toFixed(6),count,countOnRed)
-        row.appendChild(merge)
-        const quick = document.createElement("td")
-        quick.innerHTML = data.quickSort[i].toFixed(6)
-        count = defineStyle(quick,data.bubbleSort[i].toFixed(6),data.quickSort[i].toFixed(6),count,countOnRed)
-        row.appendChild(quick)
-        const quickIP = document.createElement("td")
-        quickIP.innerHTML = data.quickSortIP[i].toFixed(6)
-        count = defineStyle(quickIP,data.bubbleSort[i].toFixed(6),data.quickSortIP[i].toFixed(6),count,countOnRed)
-        row.appendChild(quickIP)
-        rows.push(row)
+    let i = 0
+    const lazyLoad = () =>{
+        if(i< data.mergeSort.length){
+            setTimeout(() => {
+                let count = 0
+                const row = document.createElement("tr")
+                const length = document.createElement("td")
+                length.innerHTML = data.length[i]
+                row.appendChild(length)
+                const bubble = document.createElement("td")
+                bubble.innerHTML = data.bubbleSort[i].toFixed(6)
+                row.appendChild(bubble)
+                const merge = document.createElement("td")
+                merge.innerHTML = data.mergeSort[i].toFixed(6)
+                count = defineStyle(merge,data.bubbleSort[i].toFixed(6),data.mergeSort[i].toFixed(6),count,countOnRed)
+                row.appendChild(merge)
+                const quick = document.createElement("td")
+                quick.innerHTML = data.quickSort[i].toFixed(6)
+                count = defineStyle(quick,data.bubbleSort[i].toFixed(6),data.quickSort[i].toFixed(6),count,countOnRed)
+                row.appendChild(quick)
+                const quickIP = document.createElement("td")
+                quickIP.innerHTML = data.quickSortIP[i].toFixed(6)
+                count = defineStyle(quickIP,data.bubbleSort[i].toFixed(6),data.quickSortIP[i].toFixed(6),count,countOnRed)
+                row.appendChild(quickIP)
+                table.appendChild(row)
+                i++
+                lazyLoad()
+            }, 0);
+        }  
     }
-    table.append(...rows)
+    lazyLoad()
+
 }
 
 ;(async function(){
@@ -90,12 +97,20 @@ const drawTable = (data,tableId,countOnRed=false) => {
     const lengthData = await fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/criticalLength.json").then(response => response.json()).then(data => {
         return data
     })
-    for(let i = 1; i<6; i++){
-        drawTable(orderedData[i],"o-data-table-"+i,true)
-        drawTable(reversedData[i],"bo-data-table-"+i)
-        drawTable(randomData[i],"r-data-table-"+i)
-        drawTable(lengthData[i],"c-data-table-"+i)
+    let i = 0;
+    const lazyLoad = () =>{
+        if(i<6){
+            setTimeout(()=>{
+                drawTable(orderedData[i],"o-data-table-"+i,true)
+                drawTable(reversedData[i],"bo-data-table-"+i)
+                drawTable(randomData[i],"r-data-table-"+i)
+                drawTable(lengthData[i],"c-data-table-"+i)
+                i++
+                lazyLoad()
+            },0)
+        } 
     }
+    lazyLoad()
 })()
 
 
