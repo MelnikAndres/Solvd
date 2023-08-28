@@ -24,7 +24,6 @@ const defineStyle = (element, bubbleValue,value,count,countOnRed) => {
         arrow.classList.add("arrow-red")
         element.appendChild(arrow)
         if(countOnRed){
-            element.setAttribute("count",count+1)
             return count+1
         }
     }else if(bubbleValue<value){
@@ -38,7 +37,6 @@ const defineStyle = (element, bubbleValue,value,count,countOnRed) => {
         arrow.classList.add("arrow-green")
         element.appendChild(arrow)
         if(!countOnRed){
-            element.setAttribute("count",count+1)
             return count+1
         }
         
@@ -73,6 +71,7 @@ const drawTable = (data,tableId,countOnRed=false) => {
                 quickIP.innerHTML = data.quickSortIP[i].toFixed(6)
                 count = defineStyle(quickIP,data.bubbleSort[i].toFixed(6),data.quickSortIP[i].toFixed(6),count,countOnRed)
                 row.appendChild(quickIP)
+                row.setAttribute("count",count)
                 table.appendChild(row)
                 i++
                 lazyLoad()
@@ -122,6 +121,12 @@ const showNext = (fatherId) =>{
     if(id.slice(-1)==="5"){
         return
     }
+    if(id.slice(-1)==="4"){
+        father.classList.add("no-next")
+    }else{
+        father.classList.remove("no-next")
+    }
+    father.classList.remove("no-previous")
     const next = document.getElementById(id.slice(0,-1)+(+id.slice(-1)+1))
     active.classList.remove("show-table")
     next.classList.add("show-table")
@@ -134,6 +139,12 @@ const showPrevious = (fatherId) =>{
     if(id.slice(-1)==="0"){
         return
     }
+    if(id.slice(-1)==="1"){
+        father.classList.add("no-previous")
+    }else{
+        father.classList.remove("no-previous")
+    }
+    father.classList.remove("no-next")
     const previous = document.getElementById(id.slice(0,-1)+(+id.slice(-1)-1))
     active.classList.remove("show-table")
     previous.classList.add("show-table")
