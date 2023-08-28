@@ -29,24 +29,25 @@ nav{
     background-color: var(--white);
     box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.2);
     z-index: 1000;
-    & a{
-        text-decoration: none;
-        color: var(--black);
-        text-align: center;
-        flex-grow: 1;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease-in-out;
-        }
-    & a:hover{
-        color: var(--black) !important;
-        text-decoration: underline;
-        filter: brightness(0);
-    }
+    
 }
-nav:has(a:hover) a{
+nav a{
+    text-decoration: none;
+    color: var(--black);
+    text-align: center;
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    }
+nav a:hover{
+    color: var(--black) !important;
+    text-decoration: underline;
+    filter: brightness(0);
+}
+nav:hover a:not(:hover){
     color: var(--sec);
 }
 .intro{
@@ -55,21 +56,21 @@ nav:has(a:hover) a{
     width: 100%;
     display: grid;
     place-content: center;
-    & h1{
-        text-align: center;
-        font-size: 3em;
-        color: var(--black);
-    }
-    & p{
-        text-align: center;
-        font-size: 1.5em;
-        color:var(--main);
-    }
-    & span{
-        font-size: 1em;
-        color:var(--main);
-        text-align: center;
-    }
+}
+.intro h1{
+    text-align: center;
+    font-size: 3em;
+    color: var(--black);
+}
+.intro p{
+    text-align: center;
+    font-size: 1.5em;
+    color:var(--main);
+}
+.intro span{
+    font-size: 1em;
+    color:var(--main);
+    text-align: center;
 }
 .bg{
     position: absolute;
@@ -97,27 +98,26 @@ nav:has(a:hover) a{
     padding-top: calc(21px + 3em);
     display: grid;
     justify-content: center;
-    align-content: start;
-    & table{
-        background-color: var(--main);
-        border-collapse: collapse;
-        border: 1px solid var(--main);
-        width: fit-content;
-        margin: auto;
-        & td,th{
-            padding: 1em;
-        }
-        & th{
-            background-color: var(--whiter);
-        }
-        & tr:nth-child(2n + 1){
-            background-color: var(--whiter);
-        }
-        & tr:nth-child(2n){
-            background-color: var(--white);
-        }
-    }
-    
+    align-content: start; 
+}
+.data-tables table{
+    background-color: var(--main);
+    border-collapse: collapse;
+    border: 1px solid var(--main);
+    width: fit-content;
+    margin: auto;
+}
+.data-tables table td,th{
+    padding: 1em;
+}
+.data-tables table th{
+    background-color: var(--whiter);
+}
+.data-tables table tr:nth-child(2n + 1){
+    background-color: var(--whiter);
+}
+.data-tables table tr:nth-child(2n){
+    background-color: var(--white);
 }
 .arrow-red{
     display: inline-block;
@@ -176,46 +176,45 @@ table{
     left: 0;
     z-index: 50;
     margin: 1em 0;
-    & button{
-        padding: 2px 4px;
-        border: 1px solid var(--black);
-        outline: none;
-        background-color: var(--white);
-        cursor: pointer;
-        transition: all 0.1s ease-in-out;
-    }
-    &:has(button:hover) button{
-
-        border-color: var(--sec);
-        opacity: 0.8;
-        & span{
-            border-color: transparent transparent var(--sec) transparent;
-        }
-    }
-    & button:hover{
-        background-color: var(--whiter);
-        border-color: var(--black) !important;
-        opacity: 1 !important;
-        & span{
-            border-color: transparent transparent var(--black) transparent !important;
-        }
-    }
+}
+.data-tables .buttons button{
+    padding: 2px 4px;
+    border: 1px solid var(--black);
+    outline: none;
+    background-color: var(--white);
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+.data-tables .buttons:hover button:not(:hover){
+    border-color: var(--sec);
+    opacity: 0.8;
+}
+.data-tables .buttons:hover button:not(:hover) span{
+    border-color: transparent transparent var(--sec) transparent;
+}
+.data-tables .buttons button:hover{
+    background-color: var(--whiter);
+    border-color: var(--black) !important;
+    opacity: 1 !important;
+}
+.data-tables .buttons button:hover span{
+    border-color: transparent transparent var(--black) transparent !important;
 }
 .data-tables:has(:nth-child(9).show-table) .buttons button:nth-child(2){
     opacity: 0.2 !important;
     border-color: var(--sec) !important;
     cursor:default;
-    & span{
-        border-color: transparent transparent var(--sec) transparent !important;
-    }
+}
+.data-tables:has(:nth-child(9).show-table) .buttons button:nth-child(2) span{
+    border-color: transparent transparent var(--sec) transparent !important;
 }
 .data-tables:has(:nth-child(4).show-table) .buttons button:nth-child(1){
     opacity: 0.2 !important;
     border-color: var(--sec) !important;
     cursor:default;
-    & span{
-        border-color: transparent transparent var(--sec) transparent !important;
-    }
+}
+.data-tables:has(:nth-child(4).show-table) .buttons button:nth-child(1) span{
+    border-color: transparent transparent var(--sec) transparent !important;
 }
 
 .left{
@@ -285,11 +284,10 @@ footer{
     padding: 1em 10%;
     background-color: var(--black);
     color: var(--white);
-    & a{
-        color: var(--white);
-    }
 }
-
+footer a{
+    color: var(--white);
+}
 
 @media (max-width:600px) {
     *{
