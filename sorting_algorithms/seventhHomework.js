@@ -58,7 +58,7 @@ const quickSort = (toSort) =>{
     }
     return [...quickSort(left),pivot,...quickSort(right)]
 }
-const quickSort2 = (toSort) =>{
+const quickSortIP = (toSort) =>{
     _quickSort(toSort,0,toSort.length-1)
 }
 const _quickSort = (toSort,startI,endI) =>{
