@@ -97,7 +97,7 @@ const drawTable = (data,tableId,countOnRed=false) => {
     const lengthData = await fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/criticalLength.json").then(response => response.json()).then(data => {
         return data
     })
-    let i = 0;
+    let i = 1;
     const lazyLoad = () =>{
         if(i<6){
             setTimeout(()=>{
