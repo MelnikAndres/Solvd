@@ -89,8 +89,7 @@ const _quickSort = (toSort,startI,endI) =>{
     _quickSort(toSort,startI,i-1)
     _quickSort(toSort,i+1,endI)
 }
-
-/* ---Functions used to generate data--- 
+/* ---Data generation---
 const measureArrayPerformance = (callback, array) => {
     if(typeof callback !== "function" || !Array.isArray(array)) throw new TypeError("Arguments must be of type (function,array)")
     const start = performance.now()
@@ -114,3 +113,4 @@ const measureAveragePerformance = (funcToMeasure,{arrays=[],MAXREP=20,MAXLENGTH=
     return measuredTime.reduce((acc, curr) => acc + curr, 0)/measuredTime.length
 }
 */
+
