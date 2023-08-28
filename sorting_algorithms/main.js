@@ -49,6 +49,7 @@ const defineStyle = (element, bubbleValue,value,count,countOnRed) => {
 const drawTable = (data,tableId,countOnRed=false) => {
     const table = document.getElementById(tableId)
     table.appendChild(createHeader())
+    const rows = []
     for(let i = 0; i< data.mergeSort.length; i++){
         let count = 0
         const row = document.createElement("tr")
@@ -70,30 +71,34 @@ const drawTable = (data,tableId,countOnRed=false) => {
         quickIP.innerHTML = data.quickSortIP[i].toFixed(6)
         count = defineStyle(quickIP,data.bubbleSort[i].toFixed(6),data.quickSortIP[i].toFixed(6),count,countOnRed)
         row.appendChild(quickIP)
-        table.appendChild(row)
+        rows.push(row)
     }
+    table.append(...rows)
 }
 
-fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/orderedArray.json").then(response => response.json()).then(data => {
+;(async function(){
+    const orderedData = await fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/orderedArray.json").then(response => response.json()).then(data => {
+        return data  
+    })
+    const reversedData = await fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/backOrderedArray.json").then(response => response.json()).then(data => {
+        return data
+    })
+    const randomData = await fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/randomArray.json").then(response => response.json()).then(data => {
+        return data
+    
+    })
+    const lengthData = await fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/criticalLength.json").then(response => response.json()).then(data => {
+        return data
+    })
     for(let i = 0; i<6; i++){
-        drawTable(data[i],"o-data-table-"+i,true)
+        drawTable(orderedData[i],"o-data-table-"+i,true)
+        drawTable(reversedData[i],"bo-data-table-"+i)
+        drawTable(randomData[i],"r-data-table-"+i)
+        drawTable(lengthData[i],"c-data-table-"+i)
     }
-})
-fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/backOrderedArray.json").then(response => response.json()).then(data => {
-    for(let i = 0; i<6; i++){
-        drawTable(data[i],"bo-data-table-"+i)
-    }
-})
-fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/randomArray.json").then(response => response.json()).then(data => {
-    for(let i = 0; i<6; i++){
-        drawTable(data[i],"r-data-table-"+i)
-    }
-})
-fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/criticalLength.json").then(response => response.json()).then(data => {
-    for(let i = 0; i<6; i++){
-        drawTable(data[i],"c-data-table-"+i)
-    }
-})
+})()
+
+
 const showNext = (fatherId) =>{
     const father = document.getElementById(fatherId)
     console.log(father)
