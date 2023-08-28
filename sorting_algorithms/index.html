@@ -109,19 +109,25 @@
                 </table>
                 <p class="tiny">After last values, bubble sort is always the <span class="important">slowest</span></p>
             </section>
-            <section class="conclusion" id="conclusion">
-                <h2>Conclusion</h2>
-                <br>
-                <h3>Critical Length</h3>
-                <p>After analyzing the data, we can see there is no exact critical length from which bubble sort is always slower than the other algorithms, because ordered arrays will always be faster on bubble sort. 
-                    However, we can notice that around <span class="important">length 80</span> cases were bubble sort is faster become less common.<br>
-                    The closer the array is to being ordered, the faster bubble sort will be. The closer the array is to being reversed, the slower bubble sort will be.</p>
-                <br>
-                    <h3>Complexity</h3>
-                    <p>Merge Sort and Quick Sort are generally faster than Bubble Sort, because they have a better complexity, which means they will eventually do less operations for each element when the array grows.
-                    Although, Quick Sort is not always faster than Merge Sort, because it has a worst case scenario, <span class="important">In-Place Quick Sort</span> is the fastest algorithm overall, because swaping elements is usually faster than rearranging them.
-                </p>
-            </section>
+            <div class="conclusion-wrap">
+                <div class="bg-2">
+                    <div class="bg-light"></div>
+                </div>
+                <section class="conclusion" id="conclusion">
+                    <h2>Conclusion</h2>
+                    <br>
+                    <h3>Critical Length</h3>
+                    <p>After analyzing the data, we can see there is no exact critical length from which bubble sort is always slower than the other algorithms, because ordered arrays will always be faster on bubble sort. 
+                        However, we can notice that around <span class="important">length 80</span> cases were bubble sort is faster become less common.<br>
+                        The closer the array is to being ordered, the faster bubble sort will be. The closer the array is to being reversed, the slower bubble sort will be.</p>
+                    <br>
+                        <h3>Complexity</h3>
+                        <p>Merge Sort and Quick Sort are generally faster than Bubble Sort, because they have a better complexity, which means they will eventually do less operations for each element when the array grows.
+                        Although, Quick Sort is not always faster than Merge Sort, because it has a worst case scenario, <span class="important">In-Place Quick Sort</span> is the fastest algorithm overall, because swaping elements is usually faster than rearranging them.
+                    </p>
+                </section>
+            </div>
+            
             <footer>
                 Source code used for the tests: <a href="https://github.com/MelnikAndres/Solvd/blob/main/sorting_algorithms/seventhHomework.js" target="_blank">Sorting Algorithms</a><br>
                 Website source code: <a href="https://github.com/MelnikAndres/Solvd/tree/main/sorting_algorithms" target="_blank" rel="noopener noreferrer">Website Code</a><br>

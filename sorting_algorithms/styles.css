@@ -81,7 +81,6 @@ nav:has(a:hover) a{
     z-index: -1;
 }
 .bg-circle{
-    content: '';
     position: absolute;
     top: 0;
     right:0;
@@ -255,16 +254,26 @@ table{
     display: grid;
     align-content: start;
 }
-.conclusion::after{
-    content: '';
+.conclusion-wrap{
+    position: relative;
+}
+.bg-2{
+    position: absolute;
+    top: -150px;
+    left:0;
+    height: calc(100% + 150px);
+    width: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+.bg-light{
     position: absolute;
     display: block;
     top: -150px;
     width: 50%;
     left: 25%;
-    height: 200px;
+    height: 100%;
     background: linear-gradient(var(--whiter)80%,var(--white));
-    margin: 1em 0;
     transform: perspective(100px) rotateX(45deg);
     z-index: -1;
 }
@@ -280,6 +289,7 @@ footer{
         color: var(--white);
     }
 }
+
 
 @media (max-width:600px) {
     *{
