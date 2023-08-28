@@ -1,0 +1,303 @@
+*{
+    margin: 0;
+    padding: 0;
+    --black:#352F44;
+    --main:#716887;
+    --sec:#B9B4C7;
+    --white:#FAF0E6;
+    --whiter:rgb(255, 246, 235);
+    font-family: 'Roboto Slab', serif;
+    font-size: 16px;
+    color: var(--black);
+}
+
+body{
+    background-color: var(--white);
+    overflow-x: hidden;
+    overflow-y: visible;
+    position: relative;
+}
+
+nav{
+    position: fixed;
+    top: 0;
+    width: calc(100vw - 2em);
+    height: calc(21px + 2em);
+    display: flex;
+    justify-content: space-around;
+    padding: 0 1em;
+    background-color: var(--white);
+    box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    & a{
+        text-decoration: none;
+        color: var(--black);
+        text-align: center;
+        flex-grow: 1;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease-in-out;
+        }
+    & a:hover{
+        color: var(--black) !important;
+        text-decoration: underline;
+        filter: brightness(0);
+    }
+}
+nav:has(a:hover) a{
+    color: var(--sec);
+}
+.intro{
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    place-content: center;
+    & h1{
+        text-align: center;
+        font-size: 3em;
+        color: var(--black);
+    }
+    & p{
+        text-align: center;
+        font-size: 1.5em;
+        color:var(--main);
+    }
+    & span{
+        font-size: 1em;
+        color:var(--main);
+        text-align: center;
+    }
+}
+.bg{
+    position: absolute;
+    top: 0;
+    right:0;
+    height: 200vh;
+    width: 100vw;
+    overflow: hidden;
+    z-index: -1;
+}
+.bg-circle{
+    content: '';
+    position: absolute;
+    top: 0;
+    right:0;
+    height: 200vh;
+    max-height: 100vw;
+    transform: translate(50%,0);
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: var(--white);
+    filter: brightness(1.03);
+    z-index: -1;
+}
+.data-tables{
+    padding-top: calc(21px + 3em);
+    display: grid;
+    justify-content: center;
+    align-content: start;
+    & table{
+        background-color: var(--main);
+        border-collapse: collapse;
+        border: 1px solid var(--main);
+        width: fit-content;
+        margin: auto;
+        & td,th{
+            padding: 1em;
+        }
+        & th{
+            background-color: var(--whiter);
+        }
+        & tr:nth-child(2n + 1){
+            background-color: var(--whiter);
+        }
+        & tr:nth-child(2n){
+            background-color: var(--white);
+        }
+    }
+    
+}
+.arrow-red{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0.5em 0.75em 0.5em;
+    border-color: transparent transparent red transparent;
+    margin-left: 2px;
+}
+.arrow-yellow{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0.5em 0.75em 0.5em;
+    border-color: transparent transparent goldenrod transparent;
+    margin-left: 2px;
+}
+.arrow-green{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0.5em 0.75em 0.5em;
+    border-color: transparent transparent green transparent;
+    margin-left: 2px;
+    transform: scaleY(-1);
+}
+tr:has(td[count="3"])+tr:has(td[count="3"])+tr:has(td[count="3"]){
+    display: none;
+}
+table{
+    display: none;
+}
+.show-table{
+    display: block;
+}
+.tiny{
+    color: var(--sec);
+    z-index: 100;
+}
+.important{
+    color: var(--main);
+    font-weight: bold;
+}
+.non-breakable{
+    white-space: nowrap;
+}
+.data-tables .buttons{
+    position: sticky;
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    top: calc(21px + 3em);
+    left: 0;
+    z-index: 50;
+    margin: 1em 0;
+    & button{
+        padding: 2px 4px;
+        border: 1px solid var(--black);
+        outline: none;
+        background-color: var(--white);
+        cursor: pointer;
+        transition: all 0.1s ease-in-out;
+    }
+    &:has(button:hover) button{
+
+        border-color: var(--sec);
+        opacity: 0.8;
+        & span{
+            border-color: transparent transparent var(--sec) transparent;
+        }
+    }
+    & button:hover{
+        background-color: var(--whiter);
+        border-color: var(--black) !important;
+        opacity: 1 !important;
+        & span{
+            border-color: transparent transparent var(--black) transparent !important;
+        }
+    }
+}
+.data-tables:has(:nth-child(9).show-table) .buttons button:nth-child(2){
+    opacity: 0.2 !important;
+    border-color: var(--sec) !important;
+    cursor:default;
+    & span{
+        border-color: transparent transparent var(--sec) transparent !important;
+    }
+}
+.data-tables:has(:nth-child(4).show-table) .buttons button:nth-child(1){
+    opacity: 0.2 !important;
+    border-color: var(--sec) !important;
+    cursor:default;
+    & span{
+        border-color: transparent transparent var(--sec) transparent !important;
+    }
+}
+
+.left{
+    position: relative;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    top: 1px;
+    right: 1px;
+    border-style: solid;
+    border-width: 0 8px 13.9px 8px;
+    border-color: transparent transparent var(--black) transparent;
+    transform: rotate(-90deg);
+}
+
+.right{
+    position: relative;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    top: 1px;
+    left: 1px;
+    border-style: solid;
+    border-width: 0 8px 13.9px 8px;
+    border-color: transparent transparent var(--black) transparent;
+    transform: rotate(90deg);
+}
+.question{
+    color: var(--main);
+}
+.conclusion{
+    position: relative;
+    padding: calc(21px + 3em) 0;
+    width: 80%;
+    margin: 0 10%;
+    display: grid;
+    align-content: start;
+}
+.conclusion::after{
+    content: '';
+    position: absolute;
+    display: block;
+    top: -150px;
+    width: 50%;
+    left: 25%;
+    height: 200px;
+    background: linear-gradient(var(--whiter)80%,var(--white));
+    margin: 1em 0;
+    transform: perspective(100px) rotateX(45deg);
+    z-index: -1;
+}
+h2{
+    font-size: 1.5em;
+}
+footer{
+    width: 80%;
+    padding: 1em 10%;
+    background-color: var(--black);
+    color: var(--white);
+    & a{
+        color: var(--white);
+    }
+}
+
+@media (max-width:600px) {
+    *{
+        font-size: 12px;
+    }
+}
+@media(max-width: 420px){
+    td,th{
+        padding: 0.5em !important;
+    }
+}
+@media(max-width: 360px){
+    *{
+        font-size: 11px;
+    }
+}
+@media(max-width: 320px){
+    *{
+        font-size: 10px;
+    }
+}
