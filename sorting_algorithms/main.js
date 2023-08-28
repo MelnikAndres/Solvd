@@ -90,7 +90,7 @@ const drawTable = (data,tableId,countOnRed=false) => {
     const lengthData = await fetch("https://melnikandres.github.io/Solvd/sorting_algorithms/criticalLength.json").then(response => response.json()).then(data => {
         return data
     })
-    for(let i = 0; i<6; i++){
+    for(let i = 1; i<6; i++){
         drawTable(orderedData[i],"o-data-table-"+i,true)
         drawTable(reversedData[i],"bo-data-table-"+i)
         drawTable(randomData[i],"r-data-table-"+i)
