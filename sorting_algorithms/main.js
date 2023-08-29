@@ -115,7 +115,6 @@ const drawTable = (data,tableId,countOnRed=false) => {
 
 const showNext = (fatherId) =>{
     const father = document.getElementById(fatherId)
-    console.log(father)
     const active = father.querySelector(".show-table")
     const id = active.id
     if(id.slice(-1)==="5"){
