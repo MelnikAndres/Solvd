@@ -2,12 +2,18 @@ class AsyncOperationManager {
     simulateAsyncOperation(delay) {
         setTimeout(() => {
             console.log(`Async operation completed after ${delay} ms`);
+            process.nextTick(() => {
+                console.log("This message shows after setTimeout");
+            });
         }, delay);
     }
 
     scheduleImmediate() {
         setImmediate(() => {
             console.log("Immediate task executed");
+            process.nextTick(() => {
+                console.log("This message shows after setImmediate");
+            });
         });
     }
 
@@ -21,9 +27,7 @@ const manager = new AsyncOperationManager();
 
 manager.simulateAsyncOperation(200);//this would be executed as soon as possible after the delay has passed
 
-
 manager.scheduleMicrotask(); // this would be executed first, because it executes before the event loop is allowed to proceed
-
 
 manager.scheduleImmediate();
 //this would be executed after the poll phase, probably before the timeout because it has 200ms delay
@@ -32,31 +36,17 @@ manager.scheduleImmediate();
 Result could be:
 Microtask executed immediately
 Immediate task executed
+This message shows after setImmediate
 Async operation completed after 200 ms
+This message shows after setTimeout
 
 or:
 Microtask executed immediately
 Async operation completed after 200 ms
+This message shows after setTimeout
 Immediate task executed
+This message shows after setImmediate
 
 depending on the performance of the process.
 */
 //if we lower the delay of our async operation, we would definitely see some cases where the timeout is executed before the immediate task
-
-const fs = require('fs');
-
-fs.readFile("eighthHomework.js", () => {
-    manager.simulateAsyncOperation(200);//this would be executed as soon as possible after the delay has passed
-    manager.scheduleMicrotask(); // this would be executed first, because it executes before the event loop is allowed to proceed
-    manager.scheduleImmediate(); //this would be executed after the poll phase.
-
-    //this callback will be executed on the poll phase, that's why the immediate task will be executed right after the microtask and always before the timeout.
-});
-/*
-Result will always be:
-Microtask executed immediately
-Immediate task executed
-Async operation completed after 200 ms
-
-regardless of the delay of our async operation, because readFile is an I/0 operation.
-*/

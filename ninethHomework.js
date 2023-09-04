@@ -2,15 +2,15 @@ const promiseAll = (promises) =>{
     return new Promise((resolve, reject) =>{
         const resolved = Array.from({length:promises.length})
         let resolvedCount = 0
-        promises.forEach((promise,index) =>{
-            promise.then((value) =>{
-                resolved[index] = value
+        for(let i = 0; i < promises.length; i++){
+            promises[i].then((value) =>{
+                resolved[i] = value
                 resolvedCount++
                 if(resolved.length === resolvedCount){
                     resolve(resolved)
                 }
             },(error) =>reject(error))
-        })
+        }
     })
 }
 
@@ -18,19 +18,19 @@ const promiseAllSettled = (promises) =>{
     return new Promise((resolve,_) =>{
         const resolved = Array.from({length:promises.length})
         let resolvedCount = 0
-        promises.forEach((promise,index) =>{
-            promise.then((value) =>{
-                resolved[index] = {status:"fulfilled",value:value}
+        for(let i = 0; i < promises.length; i++){
+            promises[i].then((value) =>{
+                resolved[i] = {status:"fulfilled",value:value}
                 resolvedCount++
             },(error) =>{
-                resolved[index] = {status:"rejected",reason:error}
+                resolved[i] = {status:"rejected",reason:error}
                 resolvedCount++
             }).finally(() =>{
                 if(resolved.length === resolvedCount){
                     resolve(resolved)
                 }
             })
-        })
+        }
     })
 }
 
