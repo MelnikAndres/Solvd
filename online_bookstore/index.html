@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Bookd.</title>
+        <meta name="description" content>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#book-section">Books</a>
+            <button class="log-btn" id="login-btn">Log In</button>
+        </nav>
+        <section name="modals">
+            <section class="modal-wrapper" id="login-modal">
+                <div class="modal-content">
+                    <button class="close-btn" id="login-close"><span class="close">&times;</span></button>
+                    <h2>Log In</h2>
+                    <input type="text" id="login-email" placeholder="Email">
+                    <input type="password" id="login-password" placeholder="Password">
+                    <button class="log-btn" id="try-login-btn">Log In</button>
+                    <p>Don't have an account?  <button class="change-log" id="register-btn">Register</button></p>
+                </div>
+            </section>
+            <section class="modal-wrapper" id="register-modal">
+                <div class="modal-content">
+                    <button class="close-btn" id="register-close"><span class="close">&times;</span></button>
+                    <h2>Register</h2>
+                    <input type="text" id="register-name" placeholder="Name">
+                    <input type="text" id="register-email" placeholder="Email">
+                    <input type="password" id="register-pass" placeholder="Password">
+                    <input type="password" id="register-pass-confirm" placeholder="Confirm Password">
+                    <p>Password storing is unsecure, this is just a demo, do NOT use a real password</p>
+                    <button class="log-btn" id="try-register-btn">Register</button>
+                    <p>Already have an account? <button class="change-log" id="back-to-login-btn">Log In</button></p>
+                </div>
+            </section>
+            <button class="cart-btn" id="cart-btn"><img src="./assets/cart.png" alt="cart"></button>
+            <section class="modal-wrapper" id="cart-modal">
+                <div class="modal-content">
+                    <button class="close-btn" id="cart-close"><span class="close">&times;</span></button>
+                    <h2>Cart</h2>
+                    <section class="cart-books" id="cart-books">
+                    </section>
+                    <p class="price">Total Price:<span class="total-price" id="total-price"></span></p>
+                    <button class="checkout-btn" id="checkout-btn">Checkout</button>
+                </div>
+            </section>
+        </section>
+        <section class="home" id="home">
+            <h1>Bookd<span class="green">.</span></h1>
+            <span class="browse"><a href="#book-section">Start browsing</a></span>
+        </section>
+        <section class="books" id="book-section">
+            <h2>Our Books</h2>
+            <fieldset class="filters">
+                <legend>Filter</legend>
+                <div>
+                    <p>Title</p>
+                    <input type="text" id="title-filter">
+                </div>
+                <div>
+                    <p>Author</p>
+                    <input type="text" list="authors-list" id="authors-filter">
+                    <datalist id="authors-list">
+                    </datalist>
+                </div>
+                <div>
+                    <p>Genre</p>
+                    <input type="text" list="genre-list" id="genre-filter">
+                    <datalist id="genre-list">
+                    </datalist>
+                </div>
+                <div>
+                    <p>Price:</p>
+                    <input type="number" min="0" id="price-filter">
+                </div>
+                <div>
+                    <p>Discount:</p>
+                    <input type="number" min="0" id="discount-filter">
+                </div>
+                <div>
+                    <label for="available-checkbox">Only Available</label>
+                    <input type="checkbox" id="available-checkbox" name="available-checkbox"/>
+                </div>
+                <div>
+                    <p>ISBN:</p>
+                    <input type="text" id="isbn-filter">
+                </div> 
+            </fieldset>
+            <section class="books-list" id="books-list">
+                <div class="book" id="book${idNumber}">
+                    <img src="./assets/book-cover.png" alt="book">
+                    <h3>Tremendo LIbr2222222222o</h3>
+                    <p>Andres</p>
+                    <p class="book-price"><del>100</del>->50</p>
+                    <button class="add-to-cart-btn" id="add-to-cart-btn' + idNumber + '">Add to Cart</button>
+                </div>
+                <div class="book" id="book${idNumber}">
+                    <img src="./assets/book-cover.png" alt="book">
+                    <h3>Tremendo</h3>
+                    <p>Andres</p>
+                    <p class="book-price"><del>100</del>->50</p>
+                    <button class="add-to-cart-btn" id="add-to-cart-btn' + idNumber + '">Add to Cart</button>
+                </div>
+                <div class="book" id="book${idNumber}">
+                    <img src="./assets/book-cover.png" alt="book">
+                    <h3>Tremendo LIbr2222222o</h3>
+                    <p>Andres</p>
+                    <p class="book-price"><del>100</del>->50</p>
+                    <button class="add-to-cart-btn" id="add-to-cart-btn' + idNumber + '">Add to Cart</button>
+                </div>
+                <div class="book" id="book${idNumber}">
+                    <img src="./assets/book-cover.png" alt="book">
+                    <h3>Tremendo LIbr2222222o</h3>
+                    <p>Andres</p>
+                    <p class="book-price"><del>100</del>->50</p>
+                    <button class="add-to-cart-btn" id="add-to-cart-btn' + idNumber + '">Add to Cart</button>
+                </div>
+                <div class="book" id="book${idNumber}">
+                    <img src="./assets/book-cover.png" alt="book">
+                    <h3>Tremendo</h3>
+                    <p>Andres</p>
+                    <p class="book-price"><del>100</del>->50</p>
+                    <button class="add-to-cart-btn" id="add-to-cart-btn' + idNumber + '">Add to Cart</button>
+                </div>
+            </section>
+        </section>
+        <script type="module" src="main.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
+    </body>
+</html>
