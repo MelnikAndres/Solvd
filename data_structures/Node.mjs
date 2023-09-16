@@ -16,6 +16,22 @@ class BinaryNode {
         this.right = null;
     }
 }
+class RedBlackNode extends BinaryNode{
+    color;
+    constructor(value, color = false) {
+        super(value);
+        this.color = color;//false = red, true = black
+    }
+    setBlack(){
+        this.color = true;
+    }
+    setRed(){
+        this.color = false;
+    }
+    isRed(){
+        return !this.color;
+    }
+}
 class Edge {
     weight;
     endNode;
@@ -24,4 +40,20 @@ class Edge {
         this.endNode = endNode;
     }
 }
-export { Node, BinaryNode, Edge }
+class HashBucket {
+    key;
+    value;
+    #active;
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+        this.#active = true;
+    }
+    delete(){
+        this.#active = false;
+    }
+    isActive(){
+        return this.#active;
+    }
+}
+export { Node, BinaryNode, Edge, RedBlackNode, HashBucket }
