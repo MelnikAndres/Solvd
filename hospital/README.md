@@ -41,7 +41,7 @@ If any request that requires a body has invalid or missing data, response will b
 
 ### Get all users
 
-```http
+```
   GET /api/users
 ```
 
@@ -71,7 +71,7 @@ If any request that requires a body has invalid or missing data, response will b
 
 ### Create user
 Request body should contain information to create an user.
-```http
+```
   POST /api/users
   
 ```
@@ -95,7 +95,7 @@ Request body should contain information to create an user.
 
 ### Get user
 
-```http
+```
   GET /api/users/${id}
 ```
 
@@ -120,7 +120,7 @@ Request body should contain information to create an user.
 
 ### Update user
 
-```http
+```
   PUT /api/users/${id}
 ```
 
@@ -152,7 +152,7 @@ Request body should contain information to create an user.
 
 ### Delete user
 
-```http
+```
   DELETE /api/users/${id}
 ```
 
@@ -174,7 +174,7 @@ Request body should contain information to create an user.
 
 ### Get all specializations
 
-```http
+```
   GET /api/specializations
 ```
 
@@ -197,7 +197,7 @@ Request body should contain information to create an user.
 
 ### Create specialization
 Request body should contain information to create a specialization.
-```http
+```
   POST /api/specialization
   
 ```
@@ -222,7 +222,7 @@ Request body should contain information to create a specialization.
 
 ### Update specialization
 
-```http
+```
   PUT /api/specialization/${id}
 ```
 
@@ -247,7 +247,7 @@ Request body should contain information to create a specialization.
 
 ### Delete specialization
 
-```http
+```
   DELETE /api/specialization/${id}
 ```
 
@@ -268,7 +268,7 @@ Request body should contain information to create a specialization.
 
 ### Create doctor
 Request body should contain information to create a doctor.
-```http
+```
   POST /api/doctor
 ```
 
@@ -291,7 +291,7 @@ Request body should contain information to create a doctor.
 
 ### Get doctor
 
-```http
+```
   GET /api/doctor/${id}
 ```
 
@@ -317,7 +317,7 @@ Request body should contain information to create a doctor.
 
 ### Update doctor
 
-```http
+```
   PUT /api/doctor/${id}
 ```
 
@@ -347,7 +347,7 @@ Request body should contain information to create a doctor.
 
 ### Delete doctor
 
-```http
+```
   DELETE /api/doctor/${id}
 ```
 
@@ -369,7 +369,7 @@ Request body should contain information to create a doctor.
 
 ### Create appointment
 Request body should contain information to create an appointment.
-```http
+```
   POST /api/appointment
 
 ```
@@ -393,7 +393,7 @@ Request body should contain information to create an appointment.
 
 ### Get appointment
 
-```http
+```
   GET /api/appointment/${id}
 ```
 
@@ -421,7 +421,7 @@ Request body should contain information to create an appointment.
 
 ### Update appointment
 
-```http
+```
   PUT /api/appointment/${id}
 ```
 
@@ -453,7 +453,7 @@ Request body should contain information to create an appointment.
 
 ### Delete appointment
 
-```http
+```
   DELETE /api/appointment/${id}
 ```
 
