@@ -1,0 +1,7 @@
+const express = require('express')
+const jwtController = require('./http/JWTController')
+const bodyParser = require('body-parser')
+const app = express()
+app.use(bodyParser.json())
+app.use('/', jwtController)
+app.listen('3030')
