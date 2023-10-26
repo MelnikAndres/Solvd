@@ -31,12 +31,20 @@ Create a hospital appointment scheduling system. Patients can enter their sympto
 
 # API Reference Endpoints
 
-## Common responses
-If any request that requires admin key has an invalid or missing key, response will be:
+## Endpoint Authorization
+Every request header should include a JWT for Authorization.
+
 ```
-    HTTP/1.1 403 Forbidden
+header:
+    {
+        ...
+        Authorization: bearer <access_token>
+        ...
+    }
 ```
 
+
+## Common responses
 If any request that requires an id has an invalid or missing id, response will be:
 ```
     HTTP/1.1 404 Not Found
@@ -50,9 +58,20 @@ If any request that requires a body has invalid or missing data, response will b
 ```
 - see [ERROR_INVALID_FIELDS](#error-invalid-fields)
 
+If any request has an expired or invalid token, respone will be:
+```
+    HTTP/1.1 403 Forbidden
+    Content-Type: application/json
+    {ERROR_INVALID_TOKEN}
+```
+
+- see [ERROR_INVALID_TOKEN](#error-invalid-token)
+
+
 ## User
 
 ### Get all users
+Auth requirement: Admin level
 
 ```
   GET /api/users
@@ -62,7 +81,9 @@ If any request that requires a body has invalid or missing data, response will b
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `role` | `string` | Optional. Role filtering|
+| `name` | `string` | Optional. Name filtering|
+| `page` | `string` | Optional. Pagination|
 
 - Response
     - Valid request
@@ -72,7 +93,6 @@ If any request that requires a body has invalid or missing data, response will b
         {
             "users": [
             {USER_MODEL},
-            {USER_MODEL}
             ]
         }
         
@@ -83,17 +103,19 @@ If any request that requires a body has invalid or missing data, response will b
 
 
 ### Create user
-Request body should contain information to create an user.
+Auth requirement: Admin level
 ```
   POST /api/users
-  
+
 ```
 
-- Query parameters
+- Body structure (JSON)
 
-| Parameter | Type     | Description                       |
+| Property | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `name` | `string` | **Required**. username|
+| `password` | `string` | **Required**. password|
+| `role` | `string` | **Required**. user role|
 
 - Response:
     - Valid request
@@ -107,7 +129,7 @@ Request body should contain information to create an user.
     see [USER_MODEL](#user-model)
 
 ### Get user
-
+Auth requirement: Admin Level or Same User
 ```
   GET /api/users/${id}
 ```
@@ -117,7 +139,7 @@ Request body should contain information to create an user.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of user|
+| `id`      | `integer` | **Required**. Id of user|
 
 - Response:
     - Valid request
@@ -132,6 +154,7 @@ Request body should contain information to create an user.
     see [USER_MODEL](#user-model)
 
 ### Update user
+Auth requirement: Admin Level or Same User
 
 ```
   PUT /api/users/${id}
@@ -142,8 +165,18 @@ Request body should contain information to create an user.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of user|
-| `admin_key` | `string` | **Optional**. Secret admin key|
+| `id`      | `integer` | **Required**. Id of user|
+
+- Body structure (JSON)
+
+| Property | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Optional**. username (admin only)|
+| `new_password` | `string` | **Optional**. new password|
+| `password` | `string` | **Required**. current password|
+| `contact` | `string` | **Optional**. contact method info|
+| `contact_type` | `string` | **Optional**. contact method type|
+| `contact_id` | `string` | **Optional**. contact id (to overwrite)|
 
 - Response
     - Valid request
@@ -152,11 +185,6 @@ Request body should contain information to create an user.
         Content-Type: application/json
         {USER_MODEL}
     ```
-    - If there are admin only fields and not a valid admin key
-    ```
-        HTTP/1.1 403 Forbidden
-
-    ```
 
 - Models 
 
@@ -164,6 +192,7 @@ Request body should contain information to create an user.
 
 
 ### Delete user
+Auth requirement: Admin Level
 
 ```
   DELETE /api/users/${id}
@@ -174,8 +203,7 @@ Request body should contain information to create an user.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of user|
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `id`      | `integer` | **Required**. Id of user|
 
 - Response
     - Valid request
@@ -186,6 +214,7 @@ Request body should contain information to create an user.
 ## Specialization
 
 ### Get all specializations
+Auth requirement: User level
 
 ```
   GET /api/specializations
@@ -209,18 +238,17 @@ Request body should contain information to create an user.
     see [SPECIALIZATION_MODEL](#specialization-model)
 
 ### Create specialization
-Request body should contain information to create a specialization.
+Auth requirement: Admin level
 ```
   POST /api/specialization
   
 ```
 
-- Query parameters
+- Body structure (JSON)
 
-
-| Parameter | Type     | Description                       |
+| Property | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `name` | `string` | **Required**. Specialization name|
 
 - Response:
     - Valid request
@@ -234,6 +262,7 @@ Request body should contain information to create a specialization.
     see [SPECIALIZATION_MODEL](#specialization-model)
 
 ### Update specialization
+Auth requirement: Admin level
 
 ```
   PUT /api/specialization/${id}
@@ -244,8 +273,14 @@ Request body should contain information to create a specialization.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of specialization|
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `id`      | `integer` | **Required**. Id of specialization|
+
+- Body structure (JSON)
+
+| Property | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. Id of specialization|
+| `name` | `string` | **Required**. Specialization name|
 
 - Response
     - Valid request
@@ -259,6 +294,7 @@ Request body should contain information to create a specialization.
     see [SPECIALIZATION_MODEL](#specialization-model)
 
 ### Delete specialization
+Auth requirement: Admin level
 
 ```
   DELETE /api/specialization/${id}
@@ -269,8 +305,7 @@ Request body should contain information to create a specialization.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of specialization|
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `id`      | `integer` | **Required**. Id of specialization|
 
 - Response
     - Valid request
@@ -279,56 +314,8 @@ Request body should contain information to create a specialization.
 ```
 ## Doctor
 
-### Create doctor
-Request body should contain information to create a doctor.
-```
-  POST /api/doctor
-```
-
-- Query parameters
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `admin_key` | `string` | **Required**. Secret admin key|
-
-- Response:
-    - Valid request
-    ```
-        HTTP/1.1 200 OK
-        Content-Type: application/json
-        {DOCTOR_MODEL}
-    ```
-- Models 
-
-    see [DOCTOR_MODEL](#doctor-model)
-
-### Get doctor
-
-```
-  GET /api/doctor/${id}
-```
-
-- Query parameters
-
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of doctor|
-| `admin_key` | `string` | **Required**. Secret admin key|
-
-- Response:
-    - Valid request
-    ```
-        HTTP/1.1 200 OK
-        Content-Type: application/json
-        {DOCTOR_MODEL}
-    ```
-
-- Models 
-
-    see [DOCTOR_MODEL](#doctor-model)
-
-### Update doctor
+### Add doctor specialization
+Auth requirement: Admin level
 
 ```
   PUT /api/doctor/${id}
@@ -339,8 +326,8 @@ Request body should contain information to create a doctor.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of doctor|
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `id`      | `integer` | **Required**. Id of doctor|
+| `sp_id`      | `integer` | **Required**. Id of specialization|
 
 - Response
     - Valid request
@@ -349,16 +336,12 @@ Request body should contain information to create a doctor.
         Content-Type: application/json
         {DOCTOR_MODEL}
     ```
-    - If there are admin only fields and not a valid admin key
-    ```
-        HTTP/1.1 403 Forbidden
-    ```
-
 - Models 
 
     see [DOCTOR_MODEL](#doctor-model)
 
-### Delete doctor
+### Delete doctor specialization
+Auth requirement: Admin level
 
 ```
   DELETE /api/doctor/${id}
@@ -369,29 +352,36 @@ Request body should contain information to create a doctor.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of doctor|
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `id`      | `integer` | **Required**. Id of doctor|
+| `sp_id`      | `integer` | **Required**. Id of specialization|
 
 - Response
     - Valid request
-```
-    HTTP/1.1 204 No Content
-```
+    ```
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        {DOCTOR_MODEL}
+    ```
+- Models 
+
+    see [DOCTOR_MODEL](#doctor-model)
 
 ## Appointment
 
 ### Create appointment
-Request body should contain information to create an appointment.
+Auth requirement: Admin level or same user
 ```
   POST /api/appointment
 
 ```
 
-- Query parameters
+- Body structure (JSON)
 
-| Parameter | Type     | Description                       |
+| Property | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id` | `string` | **Required**. Id of user|
+| `id`      | `integer` | **Required**. user id|
+| `symptoms` | `string` | **Optional**. symptoms|
+| `specialization_id` | `integer` | **Optional**. specialization id|
 
 - Response:
     - Valid request
@@ -405,6 +395,7 @@ Request body should contain information to create an appointment.
     see [APPOINTMENT_MODEL](#appointment-model)
 
 ### Get appointment
+Auth requirement: Admin level or same user
 
 ```
   GET /api/appointment/${id}
@@ -415,8 +406,8 @@ Request body should contain information to create an appointment.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of appointment|
-| `uid` | `string` | **Required**. Id of user|
+| `id`      | `integer` | **Required**. Id of appointment|
+| `user_id` | `integer` | **Required**. Id of user|
 
 
 - Response:
@@ -431,9 +422,44 @@ Request body should contain information to create an appointment.
 
     see [APPOINTMENT_MODEL](#appointment-model)
 
+### Get appointments
+Auth requirement: Admin level or same user
+
+```
+  GET /api/appointment
+```
+
+- Query parameters
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `user_id` | `integer` | **Optional**. Id of user (required if not admin)|
+| `from` | `integer` | **Optional**. filter by starting day|
+| `to` | `integer` | **Optional**. filter by last day|
+| `specialization_id` | `integer` | **Optional**. filter by specialization|
+
+
+- Response:
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        {
+            "appointments":[
+            {APPOINTMENT_MODEL},
+            {APPOINTMENT_MODEL}
+            ]
+        }
+    ```
+
+- Models 
+
+    see [APPOINTMENT_MODEL](#appointment-model)
+
 
 ### Update appointment
-
+Auth requirement: Admin level
 ```
   PUT /api/appointment/${id}
 ```
@@ -443,8 +469,16 @@ Request body should contain information to create an appointment.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of appointment|
-| `admin_key` | `string` | **Required**. Secret admin key|
+| `id`      | `integer` | **Required**. Id of appointment|
+
+- Body structure (JSON)
+
+| Property | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. user id|
+| `status_id` | `integer` | **Required**. new status id|
+| `specialization_id` | `integer` | **Required**. new specialization id|
+
 
 - Response
     - Valid request
@@ -454,18 +488,12 @@ Request body should contain information to create an appointment.
         {APPOINTMENT_MODEL}
     ```
 
-    - If there are admin only fields and not a valid admin key
-    ```
-        HTTP/1.1 403 Forbidden
-
-    ```
-
 - Models 
 
     see [APPOINTMENT_MODEL](#appointment-model)
 
 ### Delete appointment
-
+Auth requirement: Admin level
 ```
   DELETE /api/appointment/${id}
 ```
@@ -475,8 +503,7 @@ Request body should contain information to create an appointment.
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of appointment|
-| `uid` | `string` | **Required**. Id of user|
+| `id`      | `integer` | **Required**. Id of appointment|
 
 - Response
     - Valid request
@@ -484,16 +511,18 @@ Request body should contain information to create an appointment.
     HTTP/1.1 204 No Content
 ```
 # Models 
-
+These models are not the same as DB models, those have more data that is not shared.
 #### User model 
-
+User model may be replaced by another role model if appropriate.
+Contact options are different for each user, this is just an example.
 ```
 USER_MODEL
 {
-    "id": "a1b2c3d4",
+    "id": 1,
     "name":"John Doe",
     "email":"JohnDoe@example.com",
     "phone":"xxxx-xxxx"   
+    "role":"user"
 }
  ```
 
@@ -508,15 +537,13 @@ SPECIALIZATION_MODEL
  ```
 
 #### Doctor model 
-
+Doctor model contains the same as user model, but also has specializations
 ```
 DOCTOR_MODEL
 {
-    "id": "a1b2c3d4",
-    "name":"John Doe",
-    "email":"JohnDoe@example.com",
-    "phone":"xxxx-xxxx",
-    "specialization":"Traumatology" 
+    ...
+    "specializations":["Traumatology"]
+    ...
 }
  ```
 
@@ -526,12 +553,12 @@ DOCTOR_MODEL
 APPOINTMENT_MODEL
 {
     "id": 1,
-    "user_id":"a1b2c3d4",
+    "user":"Doe John",
     "doctor":"John Doe",
     "specialization":"Traumatology",
     "symptoms":"Broken Leg",
-    "duration_hs":1,
-    "date":"2023-10-06 17:00:00.000" 
+    "duration_min":1,
+    "date":"2023-10-06 17:00:00" 
 }
  ```
  
@@ -549,6 +576,18 @@ ERROR_INVALID_FIELDS
     }
 }
 ```
+
+#### Error invalid token
+Contains information about the problem encountered with the token.
+
+```
+ERROR_INVALID_TOKEN
+{   "error": "INVALID_TOKEN",
+    "cause":"expired" || "forbidden" || "invalid"
+}
+```
+
+
 
 ## Tech Stack
 
