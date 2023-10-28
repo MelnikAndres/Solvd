@@ -34,6 +34,8 @@ Create a hospital appointment scheduling system. Patients can enter their sympto
 ## Endpoint Authorization
 Every request header should include a JWT for Authorization.
 
+See [Auth API](https://github.com/MelnikAndres/Solvd/blob/main/hospital_auth/README.md)
+
 ```
 header:
     {
