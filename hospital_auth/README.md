@@ -27,15 +27,17 @@ Create an authentication system with JWT, to be used on a hospital appointment s
 
 #### Create new JWT
 
-```http
+```
   POST /api/sign
 ```
 - Body structure (JSON)
+
 | Property | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `payload` | `object` | **Required**. payload object|
 
 - Payload structure
+
 | Property | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `iss` | `string` | **Required**. issuer|
@@ -69,10 +71,11 @@ Create an authentication system with JWT, to be used on a hospital appointment s
 
 #### Verify JWT
 
-```http
+```
   GET /api/verify
 ```
 - Header structure
+
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Authorization:  Bearer`      | `string` | **Required**. token to validate|
