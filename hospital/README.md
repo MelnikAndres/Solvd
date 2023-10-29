@@ -589,6 +589,10 @@ ERROR_INVALID_TOKEN
 }
 ```
 
+## Database
+
+![](/db_diagram.png)
+
 
 
 ## Tech Stack
