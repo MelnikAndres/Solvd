@@ -591,7 +591,7 @@ ERROR_INVALID_TOKEN
 
 ## Database
 
-![](/db_diagram.png)
+![](./db_diagram.png)
 
 
 
