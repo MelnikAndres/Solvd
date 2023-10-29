@@ -1,3 +1,21 @@
+CREATE TYPE "appointment_status" AS ENUM (
+  'not_derivated',
+  'assigned',
+  'finished'
+);
+
+CREATE TYPE "role" AS ENUM (
+  'user',
+  'admin',
+  'doctor'
+);
+
+CREATE TYPE "contact_type" AS ENUM (
+  'phone',
+  'email',
+  'social'
+);
+
 CREATE TABLE "appointment" (
   "id" integer PRIMARY KEY,
   "user_id" integer,
@@ -5,13 +23,8 @@ CREATE TABLE "appointment" (
   "symptoms" varchar,
   "duration_min" integer,
   "date" smalldatetime,
-  "status_id" integer,
+  "status" appointment_status,
   "created_at" timestamp
-);
-
-CREATE TABLE "appointment_status" (
-  "id" integer PRIMARY KEY,
-  "status" varchar
 );
 
 CREATE TABLE "specialization" (
@@ -24,26 +37,16 @@ CREATE TABLE "user" (
   "name" varchar,
   "password" varchar,
   "contact_id" integer,
-  "role_id" integer,
+  "role" role,
   "token_validator" varchar,
   "created_at" timestamp
-);
-
-CREATE TABLE "role" (
-  "id" integer PRIMARY KEY,
-  "name" varchar
 );
 
 CREATE TABLE "contact_info" (
   "id" integer PRIMARY KEY,
   "info" varchar,
-  "contact_type_id" integer,
+  "contact_type" contact_type,
   "user_id" integer
-);
-
-CREATE TABLE "contact_type" (
-  "id" integer,
-  "name" varchar
 );
 
 CREATE TABLE "doctor" (
@@ -70,14 +73,8 @@ ALTER TABLE "appointment" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "appointment" ADD FOREIGN KEY ("doctor_id") REFERENCES "doctor" ("id");
 
-ALTER TABLE "appointment" ADD FOREIGN KEY ("status_id") REFERENCES "appointment_status" ("id");
-
-ALTER TABLE "contact_info" ADD FOREIGN KEY ("contact_type_id") REFERENCES "contact_type" ("id");
-
 ALTER TABLE "contact_info" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "doctor" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "admin" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
-ALTER TABLE "user" ADD FOREIGN KEY ("role_id") REFERENCES "role" ("id");
