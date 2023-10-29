@@ -12,6 +12,7 @@
     - [Appointment](#appointment)
 - [Models](#models)
 - [Errors](#errors)
+- [Database](#database)
 - [Tech Stack](#tech-stack)
 
 # Objective
