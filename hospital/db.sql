@@ -4,6 +4,14 @@ CREATE TYPE "appointment_status" AS ENUM (
   'finished'
 );
 
+CREATE TYPE "specialization" AS ENUM (
+  'cardiology',
+  'neurology',
+  'pediatrics',
+  'dermatology',
+  'oncology'
+);
+
 CREATE TYPE "role" AS ENUM (
   'user',
   'admin',
@@ -25,11 +33,6 @@ CREATE TABLE "appointment" (
   "date" smalldatetime,
   "status" appointment_status,
   "created_at" timestamp
-);
-
-CREATE TABLE "specialization" (
-  "id" integer PRIMARY KEY,
-  "name" varchar
 );
 
 CREATE TABLE "user" (
@@ -56,8 +59,8 @@ CREATE TABLE "doctor" (
 
 CREATE TABLE "doctor_specialization" (
   "doctor_id" integer,
-  "specialization_id" integer,
-  PRIMARY KEY ("doctor_id", "specialization_id")
+  "specialization" specialization,
+  PRIMARY KEY ("doctor_id", "specialization")
 );
 
 CREATE TABLE "admin" (
@@ -66,8 +69,6 @@ CREATE TABLE "admin" (
 );
 
 ALTER TABLE "doctor_specialization" ADD FOREIGN KEY ("doctor_id") REFERENCES "doctor" ("id");
-
-ALTER TABLE "doctor_specialization" ADD FOREIGN KEY ("specialization_id") REFERENCES "specialization" ("id");
 
 ALTER TABLE "appointment" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
