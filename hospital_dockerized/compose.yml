@@ -1,0 +1,34 @@
+services:
+  hospital-app:
+    restart: always
+    build:
+      context: ./hospital
+    links:
+      - hospital-database
+    volumes:
+      - ./hospital:/usr/src/app
+      - ./hospital/node_modules:/usr/src/app/node_modules
+    ports:
+      - 3000:3000
+      
+  hospital-auth:
+    restart: always
+    build:
+      context: ./hospital_auth
+    volumes:
+      - ./hospital_auth:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3030:3030
+
+  hospital-database:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    ports:
+      - 8080:5432
