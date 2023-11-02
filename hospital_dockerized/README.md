@@ -14,6 +14,6 @@ npm test
 Remember once docker already executed db creation scripts, you need to delete associated volumes before composing, to restart db.
 
 
-![See Main API](./hospital/README.md)
+[See Main API](./hospital/README.md)
 
-![See Auth API](./hospital_auth/README.md)
+[See Auth API](./hospital_auth/README.md)
