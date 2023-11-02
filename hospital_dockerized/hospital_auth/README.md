@@ -28,7 +28,7 @@ Create an authentication system with JWT, to be used on a hospital appointment s
 #### Create new JWT
 
 ```
-  POST /api/sign
+  POST /sign
 ```
 - Body structure (JSON)
 
@@ -43,13 +43,17 @@ Create an authentication system with JWT, to be used on a hospital appointment s
 | `iss` | `string` | **Required**. issuer|
 | `sub` | `string` | **Required**. subject|
 | `exp` | `string` | **Required**. expiration time|
+| `rl` | `string` | **Required**. role|
 
 - Response:
     - Valid request
     ```
         HTTP/1.1 200 OK
         Content-Type: application/json
-        {JWT:<access_token>}
+        {"JWT":<access_token>,
+        "expire":"5m", //expiration time
+        "salt": "xxxxxxxx" //token security salt
+        }
     ```
     - No payload
     ```
@@ -72,13 +76,13 @@ Create an authentication system with JWT, to be used on a hospital appointment s
 #### Verify JWT
 
 ```
-  GET /api/verify
+  GET /verify
 ```
 - Header structure
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `Authorization:  Bearer`      | `string` | **Required**. token to validate|
+| `Authorization:`      | `string` | **Required**. token to validate|
 
 - Response:
     - Valid request
@@ -119,6 +123,7 @@ PAYLOAD_MODEL
     iss: "hospital.com", //main app domain
     sub: "123", //user id
     exp: "5m",
+    rl: "role",
     iat: 1629456789 //issued at
     sec: "anfi374nKJF84ngN5" //security invalidator
 }
@@ -141,7 +146,8 @@ ERROR_PAYLOAD
 {
     errors:["Invalid issuer",
     "Invalid subject",
-    "Invalid expiration time"]
+    "Invalid expiration time",
+    "Invalid role"]
 }
 ```
 

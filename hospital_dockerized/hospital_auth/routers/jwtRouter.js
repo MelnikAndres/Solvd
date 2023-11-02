@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const jwtController = require('../http/JWTController')
+const jwtController = require('../controllers/JWTController')
 
 router.get('/', jwtController.getStatus)
 

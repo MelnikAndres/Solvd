@@ -13,7 +13,7 @@ class Filterable {
         let compareQuery = ""
         for (let i = 0; i < this.filters.length; i++) {
             const filter = this.filters[i];
-            compareQuery += `${filter.key} ${filter.compare} '${filter.value}'` + (i < this.filters.length - 2 ? " AND " : ";")
+            compareQuery += `${filter.key} ${filter.compare} '${filter.value}'` + (i < this.filters.length - 1 ? " AND " : ";")
         }
         const query = selectQuery + compareQuery
         this.filters = []

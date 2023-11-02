@@ -55,7 +55,8 @@ function makeUrlSafe(string) {
 }
 
 function encodeData(payload){
-    payload = {...payload, iat: Date.now(), sec: makeUrlSafe(crypto.randomBytes(16).toString(BASE))}
+    payload.iat = Date.now()
+    payload.sec = makeUrlSafe(crypto.randomBytes(16).toString(BASE))
     return `${toBaseUrl(JSON.stringify(HEADER))}.${toBaseUrl(JSON.stringify(payload))}`
 }
 

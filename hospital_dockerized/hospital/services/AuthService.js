@@ -1,3 +1,4 @@
+const HOST = process.env.NODE_ENV === 'test'? 'localhost':'hospital-auth';
 class AuthService{
     constructor(){}
     newSignedToken(userId, role){
@@ -7,7 +8,7 @@ class AuthService{
             "exp":"5m",
             "rl":role
           }
-        return fetch('http://hospital-auth:3030/sign', {
+        return fetch(`http://${HOST}:3030/sign`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -17,7 +18,7 @@ class AuthService{
     }
 
     verifyToken(token, salt){
-        return fetch('http://hospital-auth:3030/verify', {
+        return fetch(`http://${HOST}:3030/verify`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
