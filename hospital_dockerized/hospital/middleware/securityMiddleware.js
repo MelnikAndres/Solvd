@@ -1,4 +1,4 @@
-const userRepository = require('../repositories/userRepository')
+const userRepository = require('../repositories/UserRepository')
 const ERRORS = {
     UNKNOWN_USER: 'Unknown user',
     COMPROMISED_TOKEN: 'Compromised token, please login again'
