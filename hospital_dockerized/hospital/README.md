@@ -9,10 +9,8 @@
     - [User](#user)
     - [Specialization](#specialization)
     - [Doctor](#doctor)
-    - [Admin](#admin)
     - [Patient](#patient)
     - [Appointment](#appointment)
-    - [Derivation](#derivation)
     - [Prescription](#prescription)
     - [Auth](#auth)
 - [Models](#models)
@@ -31,7 +29,6 @@ Create a hospital appointment scheduling system. Patients can enter their sympto
 - Appointment creation with specialization, by user
 - Appointment creation with symptoms, by user
 - Appointment management, by user
-- Appointment derivation, by admin
 - Prescription creation, by doctor
 - Login system
 
@@ -236,6 +233,56 @@ Auth requirement: Admin level
     ```
         HTTP/1.1 200 OK
     ```
+
+### Update doctor
+Auth requirement: Admin Level or Same User
+
+```
+  PUT /doctors/${id}
+```
+
+- Query parameters
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. Id of user|
+
+- Body structure (JSON)
+
+| Property | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `specialization` | `string` | **Optional**. specialization |
+
+- Response
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+    ```
+
+### Get doctor
+Auth requirement: Admin Level or Same User
+
+```
+  GET /doctors/${id}
+```
+
+- Query parameters
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. Id of user|
+
+
+- Response
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        {DOCTOR_MODEL}
+    ```
+
 ## Patient
 
 ### Create patient
@@ -287,27 +334,27 @@ Auth requirement: Admin level
         HTTP/1.1 200 OK
     ```
 
-## Admin
-
-### Create admin
-Auth requirement: Admin level
-```
-  POST /admins
+### Get patient
+Auth requirement: Admin Level or Same User
 
 ```
+  GET /patients/${id}
+```
 
-- Body structure (JSON)
+- Query parameters
 
-| Property | Type     | Description                       |
+
+| Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `name` | `string` | **Required**. username|
-| `password` | `string` | **Required**. password|
-| `role` | `string` | **Required**. role|
+| `id`      | `integer` | **Required**. Id of user|
 
-- Response:
+
+- Response
     - Valid request
     ```
         HTTP/1.1 200 OK
+        Content-Type: application/json
+        {PATIENT_MODEL}
     ```
 
 ## Appointment
@@ -315,21 +362,16 @@ Auth requirement: Admin level
 ### Create appointment
 Auth requirement: Admin level or same user
 ```
-  POST /appointments/${specialization}
+  POST /appointments
 
 ```
-- Query parameters
-
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `specialization`      | `integer` | **Required**. specialization needed|
-
 - Body structure (JSON)
 
 | Property | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `patient_id` | `integer` | **Optional**. id of patient|
+| `patient_id` | `integer` | **Required**. id of patient|
+| `specialization`      | `string` | **Optional**. specialization needed|
+| `symptoms`      | `string` | **Optional**. patient symptoms|
 
 - Response:
     - Valid request
@@ -376,7 +418,7 @@ Auth requirement: Admin level or same user
 Auth requirement: Admin level
 
 ```
-  PUT /appointment/${id}
+  PUT /appointments/${id}
 ```
 
 - Query parameters
@@ -391,8 +433,7 @@ Auth requirement: Admin level
 
 | Property | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `doctor_id` | `integer` | **Optional**. doctor id|
-| `status` | `string` | **Required**. appointment status|
+| `status` | `string` | **Optional**. appointment status|
 
 - Response:
     - Valid request
@@ -400,33 +441,11 @@ Auth requirement: Admin level
         HTTP/1.1 200 OK
     ```
 
-## Derivation
-
-### Create derivation
-Auth requirement: Admin level or same user
-```
-  POST /derivations
-
-```
-
-- Body structure (JSON)
-
-| Property | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `patient_id` | `integer` | **Required**. id of patient|
-| `symptoms` | `string` | **Required**. symptoms|
-
-- Response:
-    - Valid request
-    ```
-        HTTP/1.1 200 OK
-    ```
-
-### Get derivations
+### Delete appointment
 Auth requirement: Admin level
 
 ```
-  GET /derivations
+  DELETE /appointments/${id}
 ```
 
 - Query parameters
@@ -434,46 +453,8 @@ Auth requirement: Admin level
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `appointment_id`      | `integer` | **Optional**. Id of appointment|
-| `admin_id` | `integer` | **Optional**. Id of admin|
+| `id` | `integer` | **Required**. appointment id|
 
-
-
-- Response:
-    - Valid request
-    ```
-        HTTP/1.1 200 OK
-        Content-Type: application/json
-        [
-            {DERIVATION_MODEL},
-            {DERIVATION_MODEL}
-        ]
-    ```
-
-- Models 
-
-    see [DERIVATION_MODEL](#derivation-model)
-
-### Update derivation
-Auth requirement: Admin level
-
-```
-  PUT /derivations/${id}
-```
-
-- Query parameters
-
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id` | `integer` | **Required**. derivation id|
-
-
-- Body structure (JSON)
-
-| Property | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `admin_id` | `integer` | **Required**. admin id|
 
 - Response:
     - Valid request
@@ -535,6 +516,55 @@ Auth requirement: Admin level or same user
 - Models 
 
     see [PRESCRIPTION_MODEL](#prescription-model)
+
+### Update prescription
+Auth requirement: Doctor level
+```
+  PUT /prescriptions/${id}
+
+```
+
+- Query parameters
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. Id of prescription|
+
+- Body structure (JSON)
+
+| Property | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `info` | `string` | **Optional**. info about prescription|
+| `medicine` | `string` | **Optional**. medicine|
+
+- Response:
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+    ```
+
+### Delete prescription
+Auth requirement: Doctor level
+```
+  PUT /prescriptions/${id}
+
+```
+
+- Query parameters
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `integer` | **Required**. Id of prescription|
+
+- Response:
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+    ```
+
+
 
 ## Auth
 
@@ -613,8 +643,6 @@ PATIENT_MODEL
     ...
 }
  ```
-#### Admin model 
-Admin model contains the same as user model
 
 #### Appointment model 
 
@@ -626,20 +654,9 @@ APPOINTMENT_MODEL
     "patient_id":3,
     "duration_min":60,
     "date":"2023-10-06 19:00:00" ,
-    "status":"assigned,
+    "status":"assigned",
+    "symptoms":"headache"
     "created_at":"2023-10-06 17:00:00" 
-}
- ```
-
-#### Derivation model 
-
-```
-DERIVATION_MODEL
-{
-    "id": 1,
-    "appointment_id":2,
-    "admin_id":3,
-    "symptoms":"broken leg"
 }
  ```
 
