@@ -14,6 +14,7 @@
     - [Appointment](#appointment)
     - [Derivation](#derivation)
     - [Prescription](#prescription)
+    - [Auth](#auth)
 - [Models](#models)
 - [Errors](#errors)
 - [Database](#database)
@@ -33,7 +34,6 @@ Create a hospital appointment scheduling system. Patients can enter their sympto
 - Appointment derivation, by admin
 - Prescription creation, by doctor
 - Login system
-
 
 # API Reference Endpoints
 
@@ -82,7 +82,7 @@ If any request has an expired or invalid token, respone will be:
 Auth requirement: Admin level
 
 ```
-  GET /api/users
+  GET /users
 ```
 
 - Query parameters
@@ -111,7 +111,7 @@ Auth requirement: Admin level
 ### Get user
 Auth requirement: Admin Level or Same User
 ```
-  GET /api/users/${id}
+  GET /users/${id}
 ```
 
 - Query parameters
@@ -137,7 +137,7 @@ Auth requirement: Admin Level or Same User
 Auth requirement: Admin Level or Same User
 
 ```
-  PUT /api/users/${id}
+  PUT /users/${id}
 ```
 
 - Query parameters
@@ -171,7 +171,7 @@ Auth requirement: Admin Level or Same User
 Auth requirement: Admin Level
 
 ```
-  DELETE /api/users/${id}
+  DELETE /users/${id}
 ```
 
 - Query parameters
@@ -193,7 +193,7 @@ Auth requirement: Admin Level
 Auth requirement: User level
 
 ```
-  GET /api/specializations
+  GET /specializations
 ```
 
 - Response
@@ -218,7 +218,7 @@ Auth requirement: User level
 ### Create doctor
 Auth requirement: Admin level
 ```
-  POST /api/doctors
+  POST /doctors
 
 ```
 
@@ -241,7 +241,7 @@ Auth requirement: Admin level
 ### Create patient
 Auth requirement: Admin level
 ```
-  POST /api/patients
+  POST /patients
 
 ```
 
@@ -263,7 +263,7 @@ Auth requirement: Admin level
 ### Update patient
 Auth requirement: Admin level
 ```
-  PUT /api/patients/${id}
+  PUT /patients/${id}
 
 ```
 
@@ -292,7 +292,7 @@ Auth requirement: Admin level
 ### Create admin
 Auth requirement: Admin level
 ```
-  POST /api/admins
+  POST /admins
 
 ```
 
@@ -315,7 +315,7 @@ Auth requirement: Admin level
 ### Create appointment
 Auth requirement: Admin level or same user
 ```
-  POST /api/appointments/${specialization}
+  POST /appointments/${specialization}
 
 ```
 - Query parameters
@@ -341,7 +341,7 @@ Auth requirement: Admin level or same user
 Auth requirement: Admin level or same user
 
 ```
-  GET /api/appointments
+  GET /appointments
 ```
 
 - Query parameters
@@ -376,7 +376,7 @@ Auth requirement: Admin level or same user
 Auth requirement: Admin level
 
 ```
-  PUT /api/appointment/${id}
+  PUT /appointment/${id}
 ```
 
 - Query parameters
@@ -405,7 +405,7 @@ Auth requirement: Admin level
 ### Create derivation
 Auth requirement: Admin level or same user
 ```
-  POST /api/derivations
+  POST /derivations
 
 ```
 
@@ -426,7 +426,7 @@ Auth requirement: Admin level or same user
 Auth requirement: Admin level
 
 ```
-  GET /api/derivations
+  GET /derivations
 ```
 
 - Query parameters
@@ -458,7 +458,7 @@ Auth requirement: Admin level
 Auth requirement: Admin level
 
 ```
-  PUT /api/derivations/${id}
+  PUT /derivations/${id}
 ```
 
 - Query parameters
@@ -486,7 +486,7 @@ Auth requirement: Admin level
 ### Create prescription
 Auth requirement: doctor
 ```
-  POST /api/prescriptions
+  POST /prescriptions
 
 ```
 
@@ -509,7 +509,7 @@ Auth requirement: doctor
 Auth requirement: Admin level or same user
 
 ```
-  GET /api/prescriptions/${id}
+  GET /prescriptions/${id}
 ```
 
 - Query parameters
@@ -535,6 +535,38 @@ Auth requirement: Admin level or same user
 - Models 
 
     see [PRESCRIPTION_MODEL](#prescription-model)
+
+## Auth
+
+### Login
+**Login will set cookie for jwt token authentication**
+```
+  POST /auth/login
+```
+
+- Body structure (JSON)
+
+| Property | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Required**. username|
+| `password` | `string` | **Required**. password|
+
+- Response:
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+    ```
+
+### Logout
+**Logout will remove jwt token from client**
+```
+  POST /auth/logout
+```
+- Response:
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+    ```
 
 # Models 
 These models are not the same as DB models, those have more data that is not shared.
@@ -631,11 +663,10 @@ Contains information about the fields that are causing a problem.
 
 ```
 ERROR_INVALID_FIELDS
-{   "error": "INVALID_FIELDS",
-    "fields":{
-        "fieldA" : "INVALID_FIELD",
-        "fieldB" : "MISSING_FIELD"
-    }
+{   "errors": [
+    "x must be string",
+    "x is required"
+]
 }
 ```
 
@@ -644,7 +675,7 @@ Contains information about the problem encountered with the token.
 
 ```
 ERROR_INVALID_TOKEN
-{   "error": "INVALID_TOKEN",
+{   "errors": "INVALID_TOKEN",
     "cause":"expired" || "forbidden" || "invalid"
 }
 ```
