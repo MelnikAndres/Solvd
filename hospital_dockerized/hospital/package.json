@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "node server.js",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000 -i"
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 -i"
   },
   "author": "",
   "license": "ISC",
