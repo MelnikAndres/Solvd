@@ -48,13 +48,9 @@ class AppointmentRepository extends Filterable{
     }
 
     createAppointment(appointment){
-        return db.none(`insert into "Appointments" (doctor_id,patient_id, duration_min, date, status, created_at)
-        values ('${appointment.doctor_id}', '${appointment.patient_id}', '${appointment.duration_min}', to_timestamp(${appointment.date} / 1000.0),'${appointment.status}', NOW());`)
-    }
-
-    createDerivableAppointment(patient_id){
-        return db.one(`insert into "Appointments" (doctor_id,patient_id, duration_min, date, status, created_at)
-        values (null, '${patient_id}', null, null,'not_derivated', NOW()) RETURNING ID;`)
+        const symptoms = appointment.symptoms? `'${appointment.symptoms}'`: null
+        return db.none(`insert into "Appointments" (doctor_id,patient_id, duration_min, symptoms, date, status, created_at)
+        values ('${appointment.doctor_id}', '${appointment.patient_id}', '${appointment.duration_min}', ${symptoms}, to_timestamp(${appointment.date} / 1000.0),'${appointment.status}', NOW());`)
     }
 
     getLastAppointmentOfDoctorsfromSpecialization(specialization){
@@ -76,14 +72,13 @@ class AppointmentRepository extends Filterable{
         last_appointment_date;`)
     }
 
-    updateAppointment(id, appointment){
-        let updateQuery = `update "Appointments" set `
-        if(appointment.doctor_id) updateQuery += `doctor_id = '${appointment.doctor_id}'`
-        updateQuery += (appointment.doctor_id? ", ": "") +`status = '${appointment.status}'`
-        updateQuery += ` where id = ${id};`
-        return db.none(updateQuery)
+    updateAppointment(id, status){
+        return db.none(`update "Appointments" set status = '${status}'  where id = ${id};`)
     }
 
+    deleteAppointment(id){
+        return db.none(`delete from "Appointments" where id=${id};`)
+    }
 
 }
 

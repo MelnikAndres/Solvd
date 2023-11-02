@@ -1,6 +1,6 @@
-create type "appointment_status" as enum ('not_derivated', 'assigned', 'finished');
+create type "appointment_status" as enum ('assigned', 'finished');
 create type "specialization_type" as enum (
-  'cardiology'
+  'cardiology', 'neurology', 'general'
 );
 create type "role_type" as enum ('admin', 'doctor', 'patient');
 create type "medicine_type" as enum ('apixaban');
@@ -35,6 +35,7 @@ create table if not exists "Appointments" (
   doctor_id integer,
   patient_id integer,
   duration_min integer,
+  symptoms text,
   date timestamp(0),
   status appointment_status,
   created_at timestamp,

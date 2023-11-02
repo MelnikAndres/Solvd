@@ -15,6 +15,10 @@ class PatientRepository{
         updateQuery += ` where id=${id};`
         return db.none(updateQuery)
     }
+
+    getPatientByUserId(id){
+        return db.oneOrNone(`select * from "Patients" where user_id=${id};`)
+    }
 }
 
 module.exports = new PatientRepository()

@@ -7,7 +7,16 @@ class AppointmentController{
     createAppointment(req, res){
         const isAuthorized = req.role === 'admin' || req.role === 'patient'
         if(!isAuthorized) return res.sendStatus(403)
-        appointmentRepository.getLastAppointmentOfDoctorsfromSpecialization(req.params.specialization).then((data) => {
+
+        const createAppointmentSchema = require('./schemas/createAppointmentSchema')
+        const errors = createAppointmentSchema.validate(req.body)
+        if (errors) return res.status(400).json({ errors })
+
+        if(!req.body.specialization){
+            req.body.specialization = 'general'
+        }
+
+        appointmentRepository.getLastAppointmentOfDoctorsfromSpecialization(req.body.specialization).then((data) => {
             let closestDate = new Date(8640000000000000)
             let closestDoctor = 0
             for(let i = 0; i < data.length; i++){
@@ -24,6 +33,7 @@ class AppointmentController{
                 patient_id: req.body.patient_id,
                 date: closestDate.getTime(),
                 duration_min: 60,
+                symptoms: req.body.symptoms,
                 status: 'assigned'
             }
             appointmentRepository.createAppointment(appointment).then(() => {
@@ -37,10 +47,9 @@ class AppointmentController{
     updateAppointment(req, res){
         if(req.role !== 'admin') return res.status(403)
 
-        const updateAppointmentSchema = require('./schemas/updateAppointmentSchema')
-        const errors = updateAppointmentSchema.validate(req.body)
-        if (errors) return res.status(400).json({ errors })
-        appointmentRepository.updateAppointment(req.params.id, req.body).then(() => {
+        if(!req.body.status) return res.sendStatus(200)
+
+        appointmentRepository.updateAppointment(req.params.id, req.body.status).then(() => {
             res.sendStatus(200)
         }).catch((err) => {
             res.status(500).json({ errors: [err] })
@@ -59,6 +68,15 @@ class AppointmentController{
         const query = appointmentRepository.consumeQuery()
         query.then((data) => {
             res.json(data)
+        })
+    }
+
+    deleteAppointment(req, res){
+        if(req.role !== 'admin') return res.status(403)
+        appointmentRepository.deleteAppointment(req.params.id).then(() => {
+            res.sendStatus(200)
+        }).catch((err) => {
+            res.status(500).json({ errors: [err] })
         })
     }
 

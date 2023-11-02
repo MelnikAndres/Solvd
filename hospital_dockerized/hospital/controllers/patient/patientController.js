@@ -34,6 +34,17 @@ class PatientController{
         })
     }
 
+    getPatientByUserId(req, res){
+        const userId = +req.params.id
+        const isAuthorized = req.role === 'admin' || (req.role === 'patient' && userId === req.uid)
+        if(!isAuthorized) return res.status(403)
+        patientRepository.getPatientById(userId).then((patient) => {
+            res.status(200).json(patient)
+        }).catch((err) => {
+            res.status(500).json({ errors: [err] })
+        })
+    }
+
 }
 
 module.exports = new PatientController()

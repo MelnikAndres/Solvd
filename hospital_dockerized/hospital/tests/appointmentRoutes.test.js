@@ -1,11 +1,11 @@
 const request = require('supertest')
 const app = require('../app')
-const { populate, clear } = require('./tables/manage_tables')
+const { reset } = require('./tables/manage_tables')
 let cookie = null
 
 function testAll(){
     beforeAll(done => {
-        populate().then(() => done())
+        reset().then(() => done())
     })
     
     describe('POST /auth/login', () => {
@@ -51,13 +51,43 @@ function testAll(){
         })
     })
 
-    describe('POST /appointments/:specialization', () => {
-        it('should create a new appointment on the specialization', async () => {
+    describe('POST /doctors', () => {
+        it('should create a new doctor', async () => {
             const res = await request(app)
-                .post('/appointments/cardiology')
+                .post('/doctors')
                 .set('Cookie', [`jwt=${cookie}`])
                 .send({
-                    patient_id: 1
+                    name: "AndresDocGeneral",
+                    password: "1234",
+                    role: "doctor",
+                    specialization: "general"
+                })
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
+    describe('POST /appointments', () => {
+        it('should create a new appointment', async () => {
+            const res = await request(app)
+                .post('/appointments')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send({
+                    patient_id: 1,
+                    symptoms: "headache"
+                })
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
+    describe('POST /appointments', () => {
+        it('should create a new appointment of specialization', async () => {
+            const res = await request(app)
+                .post('/appointments')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send({
+                    patient_id: 1,
+                    symptoms: "heartache",
+                    specialization: "cardiology"
                 })
             expect(res.statusCode).toEqual(200)
         })
@@ -71,6 +101,15 @@ function testAll(){
                 .send({
                     status: "finished"
                 })
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
+    describe('DELETE /appointments/:id', () => {
+        it('should delete second appointment', async () => {
+            const res = await request(app)
+                .delete('/appointments/2')
+                .set('Cookie', [`jwt=${cookie}`])
             expect(res.statusCode).toEqual(200)
         })
     })
@@ -91,10 +130,7 @@ function testAll(){
             expect(res.body[0]).toHaveProperty('status', 'finished')
         })
     })
-
-    afterAll(done => {
-        clear().then(() => done())
-    })
+    
 }
 
 testAll()

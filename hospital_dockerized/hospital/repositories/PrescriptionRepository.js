@@ -9,6 +9,18 @@ class PrescriptionRepository{
     getPrescriptionsByPatientId(patient_id){
         return db.any(`SELECT * FROM "Prescriptions" WHERE patient_id = '${patient_id}'`)
     }
+
+    updatePrescription(id, prescription){
+        let updateQuery = `update "Prescriptions" set `
+        if(prescription.info) updateQuery += `info = '${prescription.info}'`
+        if(prescription.medicine) updateQuery += (prescription.info? ", ": "") +`medicine = '${prescription.medicine}'`
+        updateQuery += ` where id=${id};`
+        return db.none(updateQuery)
+    }
+
+    deletePrescription(id){
+        return db.none(`delete from "Prescriptions" where id=${id};`)
+    }
 }
 
 module.exports = new PrescriptionRepository()

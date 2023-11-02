@@ -46,7 +46,7 @@ class UserRepository extends Filterable{
     createUser(user){
         const insertQuery = `insert into "Users" (name, hashed_pass, role, token_validator,created_at)
         values ('${user.name}', '${user.password}', '${user.role}', null, NOW()) RETURNING ID;`
-        return db.one(insertQuery)
+        return db.oneOrNone(insertQuery)
     }
 
 }

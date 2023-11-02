@@ -10,6 +10,9 @@ function sql(file) {
 }
 
 module.exports ={
-    populate: () => db.none(sql('populate_tables.sql')),
-    clear: () => db.none(sql('clear_tables.sql'))
+    reset: () => {
+        return db.none(sql('clear_tables.sql')).then(() => {
+            return db.none(sql('populate_tables.sql'))
+        })  
+}
 }

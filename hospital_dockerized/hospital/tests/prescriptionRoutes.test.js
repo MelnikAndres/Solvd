@@ -1,11 +1,11 @@
 const request = require('supertest')
 const app = require('../app')
-const { populate, clear } = require('./tables/manage_tables')
+const { reset } = require('./tables/manage_tables')
 let cookie = null
 
 function testAll(){
     beforeAll(done => {
-        populate().then(() => done())
+        reset().then(() => done())
     })
     
     describe('POST /auth/login', () => {
@@ -51,13 +51,29 @@ function testAll(){
         })
     })
 
-    describe('POST /appointments/:specialization', () => {
-        it('should create a new appointment on the specialization', async () => {
+    describe('POST /doctors', () => {
+        it('should create a new doctor', async () => {
             const res = await request(app)
-                .post('/appointments/cardiology')
+                .post('/doctors')
                 .set('Cookie', [`jwt=${cookie}`])
                 .send({
-                    patient_id: 1
+                    name: "AndresDocGeneral",
+                    password: "1234",
+                    role: "doctor",
+                    specialization: "general"
+                })
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
+    describe('POST /appointments', () => {
+        it('should create a new appointment', async () => {
+            const res = await request(app)
+                .post('/appointments')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send({
+                    patient_id: 1,
+                    symptoms: "chest pain"
                 })
             expect(res.statusCode).toEqual(200)
         })
@@ -101,6 +117,43 @@ function testAll(){
         })
     })
 
+    describe('POST /prescriptions', () => {
+        it('should create a prescription for an appointment', async () => {
+            const res = await request(app)
+                .post('/prescriptions')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send({
+                    appointment_id:1,
+                    patient_id: 1,
+                    info: "take every 12 hs",
+                    medicine: "apixaban"
+                })
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
+    describe('PUT /prescriptions/:id', () => {
+        it('should update the prescription ', async () => {
+            const res = await request(app)
+                .put('/prescriptions/1')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send({
+                    info: "take every 8 hs"
+                })
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
+    describe('DELETE /prescriptions/:id', () => {
+        it('should delete the duplicated prescription ', async () => {
+            const res = await request(app)
+                .delete('/prescriptions/2')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send()
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
     describe('POST /auth/logout', () => {
         it('should logout', async () => {
             const res = await request(app)
@@ -135,14 +188,12 @@ function testAll(){
             expect(res.body.length).toEqual(1)
             expect(res.body[0].appointment_id).toEqual(1)
             expect(res.body[0].patient_id).toEqual(1)
-            expect(res.body[0].info).toEqual("take every 12 hs")
+            expect(res.body[0].info).toEqual("take every 8 hs")
             expect(res.body[0].medicine).toEqual("apixaban")
         })
     })
 
-    afterAll(done => {
-        clear().then(() => done())
-    })
+    
 }
 
 testAll()

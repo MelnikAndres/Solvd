@@ -1,11 +1,11 @@
 const request = require('supertest')
 const app = require('../app')
-const { populate, clear } = require('./tables/manage_tables')
+const { reset } = require('./tables/manage_tables')
 let cookie = null
 
 function testAll(){
     beforeAll(done => {
-        populate().then(() => done())
+        reset().then(() => done())
     })
     
     describe('GET /specializations', () => {
