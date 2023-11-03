@@ -1,19 +1,19 @@
 const db = require('../utils/DBconnection')
 const TABLE_NAME = '"Prescriptions"'
 class PrescriptionRepository{
-    createPrescription(prescription){
+    createPrescription(appointment_id,patient_id,info,medicine){
         return db.none(`insert into ${TABLE_NAME} (appointment_id, patient_id, info, medicine)
-        values ('${prescription.appointment_id}', '${prescription.patient_id}', '${prescription.info}', '${prescription.medicine}');`)
+        values ('${appointment_id}', '${patient_id}', '${info}', '${medicine}');`)
     }
 
     getPrescriptionsByPatientId(patient_id){
         return db.any(`SELECT * FROM ${TABLE_NAME} WHERE patient_id = '${patient_id}'`)
     }
 
-    updatePrescription(id, prescription){
+    updatePrescription(id, info, medicine){
         let updateQuery = `update ${TABLE_NAME} set `
-        if(prescription.info) updateQuery += `info = '${prescription.info}'`
-        if(prescription.medicine) updateQuery += (prescription.info? ", ": "") +`medicine = '${prescription.medicine}'`
+        if(info) updateQuery += `info = '${info}'`
+        if(medicine) updateQuery += (info? ", ": "") +`medicine = '${medicine}'`
         updateQuery += ` where id=${id};`
         return db.none(updateQuery)
     }

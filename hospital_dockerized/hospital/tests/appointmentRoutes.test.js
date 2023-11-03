@@ -73,8 +73,7 @@ function testAll(){
                 .set('Cookie', [`jwt=${cookie}`])
                 .send({
                     patient_id: 1,
-                    symptoms: "headache",
-                    user_id: 2
+                    symptoms: "headache"
                 })
             expect(res.statusCode).toEqual(200)
         })
@@ -88,8 +87,7 @@ function testAll(){
                 .send({
                     patient_id: 1,
                     symptoms: "heartache",
-                    specialization: "cardiology",
-                    user_id:2
+                    specialization: "cardiology"
                 })
             expect(res.statusCode).toEqual(200)
         })

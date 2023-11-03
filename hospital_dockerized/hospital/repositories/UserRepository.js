@@ -25,10 +25,10 @@ class UserRepository extends Filterable{
         this.addFilter(filter)
     }
 
-    updateUser(userid, user){
+    updateUser(userid, name, new_pass){
         let updateQuery = `update ${TABLE_NAME} set `
-        if(user.name) updateQuery += `name='${user.name}'`
-        if(user.new_pass) updateQuery += (user.name? ", ": "") +`hashed_pass='${user.new_pass}'`
+        if(name) updateQuery += `name='${name}'`
+        if(new_pass) updateQuery += (name? ", ": "") +`hashed_pass='${new_pass}'`
         updateQuery += ` where id=${userid};`
         return db.none(updateQuery)
     }
@@ -43,9 +43,9 @@ class UserRepository extends Filterable{
         return db.none(deleteQuery)
     }
 
-    createUser(user){
+    createUser(name, password, role){
         const insertQuery = `insert into ${TABLE_NAME} (name, hashed_pass, role, token_validator,created_at)
-        values ('${user.name}', '${user.password}', '${user.role}', null, NOW()) RETURNING ID;`
+        values ('${name}', '${password}', '${role}', null, NOW()) RETURNING ID;`
         return db.oneOrNone(insertQuery)
     }
 

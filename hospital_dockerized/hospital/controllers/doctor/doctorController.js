@@ -1,25 +1,24 @@
-const doctorRepository = require('../../repositories/DoctorRepository');
-const userRepository = require('../../repositories/UserRepository');
 const {isAdmin, isDoctor, isSameUser} = require('../../utils/Authorization')
+const doctorService = require('../../services/DoctorService')
 class DoctorController{
 
-    createDoctor(req, res){
+    async createDoctor(req, res){
         if(!isAdmin(req.role)) return res.sendStatus(403)
 
         const createDoctorSchema = require('./schemas/createDoctorSchema')
         const errors = createDoctorSchema.validate(req.body)
         if (errors) return res.status(400).json({ errors })
-        userRepository.createUser(req.body).then((result) => {
-            doctorRepository.createDoctor(result.id, req.body.specialization).then(() => {
-                res.sendStatus(200)
-            })
-        }).catch((err) => {
-            res.status(500).json({ errors: [err] })
-        })
-        
+
+        try{
+            await doctorService.create(req.body.specialization, req.body.name, req.body.password, req.body.role)
+            return res.sendStatus(200)
+        }catch(err){
+            console.log(err)
+            return res.status(500).json({ errors: [err] })
+        }        
     }
 
-    updateDoctor(req, res){
+    async updateDoctor(req, res){
         const userId = +req.params.id
         const isAuthorized = isAdmin(req.role) || (isDoctor(req.role) && isSameUser(userId,req.uid))
         if(!isAuthorized) return res.sendStatus(403)
@@ -27,23 +26,26 @@ class DoctorController{
         const errors = updateDoctorSchema.validate(req.body)
         if (errors) return res.status(400).json({ errors })
 
-        doctorRepository.updateDoctor(userId, req.body.specialization).then(() => {
+        try{
+            await doctorService.updateDoctor(userId, req.body.specialization)
             res.sendStatus(200)
-        }).catch((err) => {
+        }catch(err){
             res.status(500).json({ errors: [err] })
-        })
+        }
     }
 
-    getDoctorByUserId(req, res){
+    async getDoctorByUserId(req, res){
         const userId = +req.params.id
         const isAuthorized = isAdmin(req.role) || (isDoctor(req.role) && isSameUser(userId,req.uid))
         if(!isAuthorized) return res.sendStatus(403)
-        doctorRepository.getDoctorByUserId(userId).then((doctor) => {
+        try{
+            const doctor = await doctorService.getDoctorByUserId(userId)
             if(!doctor) return res.sendStatus(404)
             res.status(200).json(doctor)
-        }).catch((err) => {
+        }catch(err){
+            console.log(err)
             res.status(500).json({ errors: [err] })
-        })
+        }
     }
 
 

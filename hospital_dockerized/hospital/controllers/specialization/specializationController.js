@@ -1,11 +1,15 @@
-const specializationRepository = require('../../repositories/SpecializationRepository');
+const specializationRepository = require('../../repositories/SpecializationRepository')
 
-class SpecializationController{
-    getAllSpecializations(req, res){
-        specializationRepository.getAll().then((data) => {
-            res.json(data)
-        })
+class specializationController{
+
+    async getAllSpecializations(req, res){
+        try{
+            const specializations = await specializationRepository.getAll()
+            return res.status(200).json(specializations)
+        }catch(err){
+            return res.status(500).json({ errors: [err] })
+        }
     }
 }
 
-module.exports = new SpecializationController()
+module.exports = new specializationController()

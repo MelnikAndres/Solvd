@@ -1,5 +1,6 @@
-const prescriptionRepository = require('../../repositories/PrescriptionRepository')
-const { isDoctor, isPatient } = require('../../utils/Authorization')
+const prescriptionService = require('../../services/PrescriptionService')
+const patientService = require('../../services/PatientService')
+const { isAdmin,isDoctor, isPatient, isSameUser } = require('../../utils/Authorization')
 
 class PrescriptionController{
 
@@ -10,43 +11,50 @@ class PrescriptionController{
         const errors = prescriptionSchema.validate(req.body)
         if (errors) return res.status(400).json({ errors })
 
-        prescriptionRepository.createPrescription(req.body).then(() => {
-            res.sendStatus(200)
-        }).catch((err) => {
-            res.status(500).json({ errors: [err] })
-        })
+        try{
+            prescriptionService.create(req.body.appointment_id,req.body.patient_id, req.body.info,req.body.medicine)
+            return res.sendStatus(200)
+        }catch(err){
+            return res.status(500).json({ errors: [err] })
+        }
     }
 
-    getPrescriptionsByPatientId(req, res){
-        if(!req.logged) return res.sendStatus(403)
-        prescriptionRepository.getPrescriptionsByPatientId(req.params.id).then((prescriptions) => {
-            res.status(200).json(prescriptions)
-        }).catch((err) => {
-            res.status(500).json({ errors: [err] })
-        })
+    async getPrescriptionsByPatientId(req, res){
+        const patient = await patientService.getPatientById(req.params.id)
+        const isAuthorized = !isAdmin(req.role) || (isPatient(req.role) && isSameUser(patient.user_id,req.uid))
+        if(!isAuthorized) return res.sendStatus(403)
+
+        try{
+            const prescriptions = await prescriptionService.getPrescriptionsByPatientId(req.params.id)
+            return res.status(200).json(prescriptions)
+        }catch(err){
+            return res.status(500).json({ errors: [err] })
+        }
     }
 
-    updatePrescription(req, res){
+    async updatePrescription(req, res){
         if(req.role !== 'doctor') return res.sendStatus(403)
 
         const updatePrescriptionSchema = require('./schemas/updatePrescriptionSchema')
         const errors = updatePrescriptionSchema.validate(req.body)
         if (errors) return res.status(400).json({ errors })
-        if(!req.body.medicine && !req.body.info) return res.sendStatus(200)
-        prescriptionRepository.updatePrescription(req.params.id, req.body).then(() => {
-            res.sendStatus(200)
-        }).catch((err) => {
-            res.status(500).json({ errors: [err] })
-        })
+
+        try{
+            await prescriptionService.updatePrescription(req.body.medicine, req.body.info, req.params.id)
+            return res.sendStatus(200)
+        }catch(err){
+            return res.status(500).json({ errors: [err] })
+        }
     }
 
-    deletePrescription(req, res){
+    async deletePrescription(req, res){
         if(req.role !== 'doctor') return res.sendStatus(403)
-        prescriptionRepository.deletePrescription(req.params.id).then(() => {
-            res.sendStatus(200)
-        }).catch((err) => {
-            res.status(500).json({ errors: [err] })
-        })
+        try{
+            await prescriptionService.deletePrescription(req.params.id)
+            return res.sendStatus(200)
+        }catch{
+            return res.status(500).json({ errors: [err] })
+        }
     }
 
 }
