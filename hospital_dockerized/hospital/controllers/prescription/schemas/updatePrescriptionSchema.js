@@ -1,20 +1,18 @@
 const Schema = require('../../../utils/Schema')
-const PROPS = {
-    INFO: "info",
-    MEDICINE: "medicine"
-}
+const {typeErrorMsg} = require('../../../utils/Error')
+const {INFO, MEDICINE} = require('../../../utils/CommonProps')
 const ERRORS = {
-    INFO_TYPE: "info must be a string",
-    MEDICINE_TYPE: "medicine must be a string"
+    INFO_TYPE: typeErrorMsg(INFO, "string"),
+    MEDICINE_TYPE: typeErrorMsg(MEDICINE, "string")
 }
 const updatePrescriptionSchema = new Schema()
 
-updatePrescriptionSchema.addValidation(PROPS.INFO,
-    (info) => !info || typeof info === 'string',
+updatePrescriptionSchema.addValidation(INFO,
+    Schema.typeValidation("string"),
     ERRORS.INFO_TYPE
 )
-updatePrescriptionSchema.addValidation(PROPS.MEDICINE,
-    (medicine) => !medicine || typeof medicine === 'string',
+updatePrescriptionSchema.addValidation(MEDICINE,
+    Schema.typeValidation("string"),
     ERRORS.MEDICINE_TYPE
 )
 

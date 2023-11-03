@@ -13,6 +13,23 @@ class Schema {
         }
         return errors.length ? errors : null
     }
+
+    static typeValidation(type){
+        return (value) => value === undefined || typeof value === type
+    }
+
+    static requiredValidation(){
+        return (value) => !!value
+    }
+    
+    static requiredValueValidation(requiredValue){
+        return (value) => value === requiredValue
+    }
+
+    static minLengthValidation(minLength){
+        return (value) => !value || value.length >= minLength
+    }
+    
 }
 
 

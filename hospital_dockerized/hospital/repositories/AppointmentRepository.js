@@ -1,9 +1,9 @@
 const db = require('../utils/DBconnection')
 const {Filterable, Filter} = require('../utils/Filterable')
-
+const TABLE_NAME = '"Appointments"'
 class AppointmentRepository extends Filterable{
     constructor(){
-        super('"Appointments"')
+        super(TABLE_NAME)
     }
 
     addFilterByName(name, value, compare = "="){
@@ -49,7 +49,7 @@ class AppointmentRepository extends Filterable{
 
     createAppointment(appointment){
         const symptoms = appointment.symptoms? `'${appointment.symptoms}'`: null
-        return db.none(`insert into "Appointments" (doctor_id,patient_id, duration_min, symptoms, date, status, created_at)
+        return db.none(`insert into ${TABLE_NAME} (doctor_id,patient_id, duration_min, symptoms, date, status, created_at)
         values ('${appointment.doctor_id}', '${appointment.patient_id}', '${appointment.duration_min}', ${symptoms}, to_timestamp(${appointment.date} / 1000.0),'${appointment.status}', NOW());`)
     }
 
@@ -63,7 +63,7 @@ class AppointmentRepository extends Filterable{
     FROM
         "Doctors" d
     LEFT JOIN
-        "Appointments" a ON d.id = a.doctor_id AND a.date > NOW()
+        ${TABLE_NAME} a ON d.id = a.doctor_id AND a.date > NOW()
     WHERE
         d.specialization = '${specialization}'
     GROUP BY
@@ -73,11 +73,11 @@ class AppointmentRepository extends Filterable{
     }
 
     updateAppointment(id, status){
-        return db.none(`update "Appointments" set status = '${status}'  where id = ${id};`)
+        return db.none(`update ${TABLE_NAME} set status = '${status}'  where id = ${id};`)
     }
 
     deleteAppointment(id){
-        return db.none(`delete from "Appointments" where id=${id};`)
+        return db.none(`delete from ${TABLE_NAME} where id=${id};`)
     }
 
 }

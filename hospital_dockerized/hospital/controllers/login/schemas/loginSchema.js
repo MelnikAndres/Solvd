@@ -1,25 +1,30 @@
 const Schema = require('../../../utils/Schema')
-const ERRORS = require('../Errors')
-const PROPS = {
-    NAME: "name",
-    PASSWORD: "password"
+const {typeErrorMsg, requiredErrorMsg} = require('../../../utils/Error')
+const {NAME, PASSWORD} = require('../../../utils/CommonProps')
+
+const ERRORS = {
+    NAME_TYPE: typeErrorMsg(NAME, "string"),
+    PASSWORD_TYPE: typeErrorMsg(PASSWORD, "string"),
+    NAME_REQUIRED: requiredErrorMsg(NAME),
+    PASSWORD_REQUIRED: requiredErrorMsg(PASSWORD)
 }
+
 const loginSchema = new Schema()
 
-loginSchema.addValidation(PROPS.NAME,
-    (name) => typeof name === 'string',
+loginSchema.addValidation(NAME,
+    Schema.typeValidation("string"),
     ERRORS.NAME_TYPE
 )
-loginSchema.addValidation(PROPS.NAME,
-    (name) => !!name,
+loginSchema.addValidation(NAME,
+    Schema.requiredValidation(),
     ERRORS.NAME_REQUIRED
 )
-loginSchema.addValidation(PROPS.PASSWORD,
-    (password) => typeof password === 'string',
+loginSchema.addValidation(PASSWORD,
+    Schema.typeValidation("string"),
     ERRORS.PASSWORD_TYPE
     )
-loginSchema.addValidation(PROPS.PASSWORD,
-    (password) => !!password,
+loginSchema.addValidation(PASSWORD,
+    Schema.requiredValidation(),
     ERRORS.PASSWORD_REQUIRED
 )
 

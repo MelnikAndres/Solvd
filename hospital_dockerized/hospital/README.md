@@ -184,6 +184,28 @@ Auth requirement: Admin Level
     HTTP/1.1 200 OK
 ```
 
+### Create admin user
+Auth requirement: Admin level
+```
+  POST /users/admin
+
+```
+
+- Body structure (JSON)
+
+| Property | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Required**. username|
+| `password` | `string` | **Required**. password|
+| `role` | `string` | **Required**. role (must be 'admin')|
+
+- Response:
+    - Valid request
+    ```
+        HTTP/1.1 200 OK
+    ```
+
+
 ## Specialization
 
 ### Get all specializations

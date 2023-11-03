@@ -7,6 +7,7 @@ router.use(passHashingMiddleware)
 
 router.get('/', userController.getAllUsers)
 router.get('/:id', userController.getUser)
+router.post('/admin', userController.createAdminUser)
 router.put('/:id', userController.updateUser)
 router.delete('/:id', userController.deleteUser)
 

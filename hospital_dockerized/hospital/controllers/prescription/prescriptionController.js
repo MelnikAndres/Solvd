@@ -1,9 +1,10 @@
 const prescriptionRepository = require('../../repositories/PrescriptionRepository')
+const { isDoctor, isPatient } = require('../../utils/Authorization')
 
 class PrescriptionController{
 
     createPrescription(req, res){
-        if(req.role !== 'doctor') return res.sendStatus(403)
+        if(!isDoctor(req.role)) return res.sendStatus(403)
 
         const prescriptionSchema = require('./schemas/prescriptionSchema')
         const errors = prescriptionSchema.validate(req.body)
@@ -17,8 +18,7 @@ class PrescriptionController{
     }
 
     getPrescriptionsByPatientId(req, res){
-        const isAuthorized = req.role === 'admin' || req.role === 'patient'
-        if(!isAuthorized) return res.sendStatus(403)
+        if(!req.logged) return res.sendStatus(403)
         prescriptionRepository.getPrescriptionsByPatientId(req.params.id).then((prescriptions) => {
             res.status(200).json(prescriptions)
         }).catch((err) => {

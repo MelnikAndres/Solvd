@@ -1,35 +1,33 @@
 const Schema = require('../../../utils/Schema')
-const PROPS = {
-    PATIENT_ID: "patient_id",
-    SYMPTOMS: "symptoms",
-    SPECIALIZATION: "specialization"
-}
+const {typeErrorMsg, requiredErrorMsg} = require('../../../utils/Error')
+const {PATIENT_ID, SYMPTOMS, SPECIALIZATION} = require('../../../utils/CommonProps')
+
 const ERRORS = {
-    PATIENT_ID_TYPE: "doctor_id must be a number",
-    SYMPTOMS_TYPE: "symptoms must be a string",
-    PATIENT_ID_REQUIRED: "patient_id is required",
-    SPECIALIZATION_TYPE: "specialization must be a string"
+    PATIENT_ID_TYPE: typeErrorMsg(PATIENT_ID, "number"),
+    SYMPTOMS_TYPE: typeErrorMsg(SYMPTOMS, "string"),
+    PATIENT_ID_REQUIRED: requiredErrorMsg(PATIENT_ID),
+    SPECIALIZATION_TYPE: typeErrorMsg(SPECIALIZATION, "string")
 }
 
 const createAppointmentSchema = new Schema()
 
-createAppointmentSchema.addValidation(PROPS.PATIENT_ID,
-    (patient_id) => typeof patient_id === 'number',
+createAppointmentSchema.addValidation(PATIENT_ID,
+    Schema.typeValidation("number"),
     ERRORS.PATIENT_ID_TYPE
 )
 
-createAppointmentSchema.addValidation(PROPS.SYMPTOMS,
-    (symptoms) => !symptoms || typeof symptoms === 'string',
+createAppointmentSchema.addValidation(SYMPTOMS,
+    Schema.typeValidation("string"),
     ERRORS.SYMPTOMS_TYPE
 )
 
-createAppointmentSchema.addValidation(PROPS.PATIENT_ID,
-    (patient_id) => !!patient_id,
+createAppointmentSchema.addValidation(PATIENT_ID,
+    Schema.requiredValidation(),
     ERRORS.PATIENT_ID_REQUIRED
 )
 
-createAppointmentSchema.addValidation(PROPS.SPECIALIZATION,
-    (specialization) => !specialization || typeof specialization === 'string',
+createAppointmentSchema.addValidation(SPECIALIZATION,
+    Schema.typeValidation("string"),
     ERRORS.SPECIALIZATION_TYPE
 )
 

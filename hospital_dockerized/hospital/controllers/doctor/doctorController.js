@@ -1,10 +1,10 @@
 const doctorRepository = require('../../repositories/DoctorRepository');
 const userRepository = require('../../repositories/UserRepository');
-
+const {isAdmin, isDoctor, isSameUser} = require('../../utils/Authorization')
 class DoctorController{
 
     createDoctor(req, res){
-        if(req.role !== 'admin') return res.sendStatus(403)
+        if(!isAdmin(req.role)) return res.sendStatus(403)
 
         const createDoctorSchema = require('./schemas/createDoctorSchema')
         const errors = createDoctorSchema.validate(req.body)
@@ -21,7 +21,7 @@ class DoctorController{
 
     updateDoctor(req, res){
         const userId = +req.params.id
-        const isAuthorized = req.role === 'admin' || (req.role === 'doctor' && userId === req.uid)
+        const isAuthorized = isAdmin(req.role) || (isDoctor(req.role) && isSameUser(userId,req.uid))
         if(!isAuthorized) return res.sendStatus(403)
         const updateDoctorSchema = require('./schemas/updateDoctorSchema.js')
         const errors = updateDoctorSchema.validate(req.body)
@@ -36,7 +36,7 @@ class DoctorController{
 
     getDoctorByUserId(req, res){
         const userId = +req.params.id
-        const isAuthorized = req.role === 'admin' || (req.role === 'doctor' && userId === req.uid)
+        const isAuthorized = isAdmin(req.role) || (isDoctor(req.role) && isSameUser(userId,req.uid))
         if(!isAuthorized) return res.sendStatus(403)
         doctorRepository.getDoctorByUserId(userId).then((doctor) => {
             if(!doctor) return res.sendStatus(404)

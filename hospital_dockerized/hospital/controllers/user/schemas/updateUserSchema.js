@@ -1,41 +1,28 @@
 const Schema = require('../../../utils/Schema')
+const {typeErrorMsg, lengthErrorMsg} = require('../../../utils/Error')
+const {NAME, NEW_PASSWORD} = require('../../../utils/CommonProps')
 const ERRORS = {
-    NAME_LENGTH: "name must be at least 1 character long",
-    PASSWORD_LENGTH: "password must be at least 1 character long",
-    PASSWORD_TYPE: "password must be of type string",
-    NAME_TYPE: "name must be of type string",
-}
-const PROPS = {
-    NAME: "name",
-    NEW_PASSWORD: "new_pass",
+    NAME_LENGTH: lengthErrorMsg(NAME, 3),
+    PASSWORD_LENGTH: lengthErrorMsg(NEW_PASSWORD, 3),
+    PASSWORD_TYPE: typeErrorMsg(NEW_PASSWORD, "string"),
+    NAME_TYPE: typeErrorMsg(NAME, "string")
 }
 const updateUserSchema = new Schema()
 
-updateUserSchema.addValidation(PROPS.NAME,
-    (name) => typeof name === 'string' || typeof name === 'undefined',
+updateUserSchema.addValidation(NAME,
+    Schema.typeValidation("string"),
     ERRORS.NAME_TYPE
 )
-updateUserSchema.addValidation(PROPS.NAME,
-    (name) => {
-        if(typeof name === 'string'){
-            return name.length > 0
-        }
-        return true
-    },
+updateUserSchema.addValidation(NAME,
+    Schema.minLengthValidation(3),
     ERRORS.NAME_LENGTH
 )
-updateUserSchema.addValidation(PROPS.NEW_PASSWORD,
-    (password) => typeof password === 'string' || typeof password === 'undefined',
+updateUserSchema.addValidation(NEW_PASSWORD,
+    Schema.typeValidation("string"),
     ERRORS.PASSWORD_TYPE
     )
-updateUserSchema.addValidation(PROPS.NEW_PASSWORD,
-    (password) => {
-        if(typeof password === 'string'){
-            return password.length > 0
-        }
-        return true
-    
-    },
+updateUserSchema.addValidation(NEW_PASSWORD,
+    Schema.minLengthValidation(3),
     ERRORS.PASSWORD_LENGTH
 )
 

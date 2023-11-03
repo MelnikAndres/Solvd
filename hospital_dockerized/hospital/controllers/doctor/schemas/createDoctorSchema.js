@@ -1,60 +1,56 @@
 const Schema = require('../../../utils/Schema')
-const PROPS = {
-    SPECIALIZATION: "specialization",
-    NAME: "name",
-    PASSWORD: "password",
-    ROLE: "role",
-    
-}
+const {typeErrorMsg, requiredErrorMsg, invalidErrorMsg} = require('../../../utils/Error')
+const {SPECIALIZATION, NAME, PASSWORD, ROLE} = require('../../../utils/CommonProps')
+
 const ERRORS = {
-    SPECIALIZATION_TYPE: "specialization must be a string",
-    SPECIALIZATION_REQUIRED: "specialization is required",
-    NAME_TYPE: "name must be of type string",
-    PASSWORD_TYPE: "password must be of type string",
-    NAME_REQUIRED: "name is required",
-    PASSWORD_REQUIRED: "password is required",
-    ROLE_TYPE: "role must be of type string",
-    ROLE_REQUIRED: "role is required",
-    ROLE_INVALID: "role is invalid",
+    SPECIALIZATION_TYPE: typeErrorMsg(SPECIALIZATION, "string"),
+    SPECIALIZATION_REQUIRED: requiredErrorMsg(SPECIALIZATION),
+    NAME_TYPE: typeErrorMsg(NAME, "string"),
+    PASSWORD_TYPE: typeErrorMsg(PASSWORD, "string"),
+    NAME_REQUIRED: requiredErrorMsg(NAME),
+    PASSWORD_REQUIRED: requiredErrorMsg(PASSWORD),
+    ROLE_TYPE: typeErrorMsg(ROLE, "string"),
+    ROLE_REQUIRED: requiredErrorMsg(ROLE),
+    ROLE_INVALID: invalidErrorMsg(ROLE),
 }
 const createDoctorSchema = new Schema()
 
-createDoctorSchema.addValidation(PROPS.SPECIALIZATION,
-    (specialization) => typeof specialization === 'string',
+createDoctorSchema.addValidation(SPECIALIZATION,
+    Schema.typeValidation("string"),
     ERRORS.SPECIALIZATION_TYPE
 )
 
-createDoctorSchema.addValidation(PROPS.SPECIALIZATION,
-    (specialization) => !!specialization,
+createDoctorSchema.addValidation(SPECIALIZATION,
+    Schema.requiredValidation(),
     ERRORS.SPECIALIZATION_REQUIRED
 )
 
-createDoctorSchema.addValidation(PROPS.NAME,
-    (name) => typeof name === 'string',
+createDoctorSchema.addValidation(NAME,
+    Schema.typeValidation("string"),
     ERRORS.NAME_TYPE
 )
-createDoctorSchema.addValidation(PROPS.NAME,
-    (name) => !!name,
+createDoctorSchema.addValidation(NAME,
+    Schema.requiredValidation(),
     ERRORS.NAME_REQUIRED
 )
-createDoctorSchema.addValidation(PROPS.PASSWORD,
-    (password) => typeof password === 'string',
+createDoctorSchema.addValidation(PASSWORD,
+    Schema.typeValidation("string"),
     ERRORS.PASSWORD_TYPE
     )
-createDoctorSchema.addValidation(PROPS.PASSWORD,
-    (password) => !!password,
+createDoctorSchema.addValidation(PASSWORD,
+    Schema.requiredValidation(),
     ERRORS.PASSWORD_REQUIRED
 )
-createDoctorSchema.addValidation(PROPS.ROLE,
-    (role) => typeof role === 'string',
+createDoctorSchema.addValidation(ROLE,
+    Schema.typeValidation("string"),
     ERRORS.ROLE_TYPE
 )
-createDoctorSchema.addValidation(PROPS.ROLE,
-    (role) => !!role,
+createDoctorSchema.addValidation(ROLE,
+    Schema.requiredValidation(),
     ERRORS.ROLE_REQUIRED
 )
-createDoctorSchema.addValidation(PROPS.ROLE,
-    (role) => role === 'doctor',
+createDoctorSchema.addValidation(ROLE,
+    Schema.requiredValueValidation("doctor"),
     ERRORS.ROLE_INVALID
 )
 

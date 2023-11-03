@@ -1,52 +1,50 @@
 const Schema = require('../../../utils/Schema')
-const PROPS = {
-    APPO_ID: "appointment_id",
-    PATIENT_ID: "patient_id",
-    INFO: "info",
-    MEDICINE: "medicine"
-}
+const {typeErrorMsg, requiredErrorMsg} = require('../../../utils/Error')
+const {APPO_ID, PATIENT_ID, INFO, MEDICINE} = require('../../../utils/CommonProps')
+
 const ERRORS = {
-    APPO_ID_TYPE: "appointment_id must be a number",
-    APPO_ID_REQUIRED: "appointment_id is required",
-    PATIENT_ID_TYPE: "patient_id must be a number",
-    PATIENT_ID_REQUIRED: "patient_id is required",
-    INFO_TYPE: "info must be a string",
-    INFO_REQUIRED: "info is required",
-    MEDICINE_TYPE: "medicine must be a string",
-    MEDICINE_REQUIRED: "medicine is required"
+    APPO_ID_TYPE: typeErrorMsg(APPO_ID, "number"),
+    PATIENT_ID_TYPE: typeErrorMsg(PATIENT_ID, "number"),
+    INFO_TYPE: typeErrorMsg(INFO, "string"),
+    MEDICINE_TYPE: typeErrorMsg(MEDICINE, "string"),
+    APPO_ID_REQUIRED: requiredErrorMsg(APPO_ID),
+    PATIENT_ID_REQUIRED: requiredErrorMsg(PATIENT_ID),
+    INFO_REQUIRED: requiredErrorMsg(INFO),
+    MEDICINE_REQUIRED: requiredErrorMsg(MEDICINE)
 }
+
 const prescriptionSchema = new Schema()
 
-prescriptionSchema.addValidation(PROPS.APPO_ID,
-    (appointment_id) => typeof appointment_id === 'number',
+prescriptionSchema.addValidation(APPO_ID,
+    Schema.typeValidation("number"),
     ERRORS.APPO_ID_TYPE
 )
-prescriptionSchema.addValidation(PROPS.APPO_ID,
-    (appointment_id) => !!appointment_id,
+prescriptionSchema.addValidation(APPO_ID,
+    Schema.requiredValidation(),
     ERRORS.APPO_ID_REQUIRED
 )
-prescriptionSchema.addValidation(PROPS.PATIENT_ID,
-    (patient_id) => typeof patient_id === 'number',
+prescriptionSchema.addValidation(PATIENT_ID,
+    Schema.typeValidation("number"),
     ERRORS.PATIENT_ID_TYPE
 )
-prescriptionSchema.addValidation(PROPS.PATIENT_ID,
-    (patient_id) => !!patient_id,
+prescriptionSchema.addValidation(PATIENT_ID,
+    Schema.requiredValidation(),
     ERRORS.PATIENT_ID_REQUIRED
 )
-prescriptionSchema.addValidation(PROPS.INFO,
-    (info) => typeof info === 'string',
+prescriptionSchema.addValidation(INFO,
+    Schema.typeValidation("string"),
     ERRORS.INFO_TYPE
 )
-prescriptionSchema.addValidation(PROPS.INFO,
-    (info) => !!info,
+prescriptionSchema.addValidation(INFO,
+    Schema.requiredValidation(),
     ERRORS.INFO_REQUIRED
 )
-prescriptionSchema.addValidation(PROPS.MEDICINE,
-    (medicine) => typeof medicine === 'string',
+prescriptionSchema.addValidation(MEDICINE,
+    Schema.typeValidation("string"),
     ERRORS.MEDICINE_TYPE
 )
-prescriptionSchema.addValidation(PROPS.MEDICINE,
-    (medicine) => !!medicine,
+prescriptionSchema.addValidation(MEDICINE,
+    Schema.requiredValidation(),
     ERRORS.MEDICINE_REQUIRED
 )
 

@@ -1,20 +1,18 @@
 const Schema = require('../../../utils/Schema')
-const PROPS = {
-    EMAIL: "email",
-    PHONE: "phone"
-}
+const {typeErrorMsg} = require('../../../utils/Error')
+const {EMAIL, PHONE} = require('../../../utils/CommonProps')
 const ERRORS = {
-    EMAIL_TYPE: "email must be a string",
-    PHONE_TYPE: "phone must be a string",
+    EMAIL_TYPE: typeErrorMsg(EMAIL, "string"),
+    PHONE_TYPE: typeErrorMsg(PHONE, "string")
 }
 const updatePatientSchema = new Schema()
 
-updatePatientSchema.addValidation(PROPS.EMAIL,
-    (email) => !email || typeof email === 'string',
+updatePatientSchema.addValidation(EMAIL,
+    Schema.typeValidation("string"),
     ERRORS.EMAIL_TYPE
 )
-updatePatientSchema.addValidation(PROPS.PHONE,
-    (phone) => !phone || typeof phone === 'string',
+updatePatientSchema.addValidation(PHONE,
+    Schema.typeValidation("string"),
     ERRORS.PHONE_TYPE
 )
 

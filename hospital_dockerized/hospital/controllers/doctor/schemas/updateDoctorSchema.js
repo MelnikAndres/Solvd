@@ -1,20 +1,20 @@
 const Schema = require('../../../utils/Schema')
-const PROPS = {
-    SPECIALIZATION: "specialization",  
-}
+const {typeErrorMsg, requiredErrorMsg} = require('../../../utils/Error')
+const {SPECIALIZATION} = require('../../../utils/CommonProps')
+
 const ERRORS = {
-    SPECIALIZATION_TYPE: "specialization must be a string",
-    SPECIALIZATION_REQUIRED: "specialization is required"
+    SPECIALIZATION_TYPE: typeErrorMsg(SPECIALIZATION, "string"),
+    SPECIALIZATION_REQUIRED: requiredErrorMsg(SPECIALIZATION)
 }
 const updateDoctorSchema = new Schema()
 
-updateDoctorSchema.addValidation(PROPS.SPECIALIZATION,
-    (specialization) => typeof specialization === 'string',
+updateDoctorSchema.addValidation(SPECIALIZATION,
+    Schema.typeValidation("string"),
     ERRORS.SPECIALIZATION_TYPE
 )
 
-updateDoctorSchema.addValidation(PROPS.SPECIALIZATION,
-    (specialization) => !!specialization,
+updateDoctorSchema.addValidation(SPECIALIZATION,
+    Schema.requiredValidation(),
     ERRORS.SPECIALIZATION_REQUIRED
 )
 

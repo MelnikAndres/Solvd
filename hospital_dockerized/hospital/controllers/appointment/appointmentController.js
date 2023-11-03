@@ -1,12 +1,12 @@
 const appointmentRepository = require('../../repositories/AppointmentRepository');
-
-const FILTERS = ["id", "doctor_id", "patient_id", "status"]
+const {isAdmin,isSameUser} = require('../../utils/Authorization')
+const {ID, DOCTOR_ID, PATIENT_ID, STATUS} = require('../../utils/CommonProps')
+const FILTERS = [ID, DOCTOR_ID, PATIENT_ID, STATUS]
 
 class AppointmentController{
 
     createAppointment(req, res){
-        const isAuthorized = req.role === 'admin' || req.role === 'patient'
-        if(!isAuthorized) return res.sendStatus(403)
+        if(!isAdmin(req.role) && !isSameUser(req.uid,req.body.user_id)) return res.sendStatus(403)
 
         const createAppointmentSchema = require('./schemas/createAppointmentSchema')
         const errors = createAppointmentSchema.validate(req.body)
@@ -45,7 +45,7 @@ class AppointmentController{
     }
 
     updateAppointment(req, res){
-        if(req.role !== 'admin') return res.status(403)
+        if(!isAdmin(req.role)) return res.status(403)
 
         if(!req.body.status) return res.sendStatus(200)
 
@@ -57,6 +57,7 @@ class AppointmentController{
     }
 
     getAppointments(req, res){
+        if(!req.logged) return res.sendStatus(403)
         for(let i = 0; i < FILTERS.length; i++){
             if(req.query[FILTERS[i]]){
                 appointmentRepository.addFilterByName(FILTERS[i], req.query[FILTERS[i]])
@@ -72,7 +73,7 @@ class AppointmentController{
     }
 
     deleteAppointment(req, res){
-        if(req.role !== 'admin') return res.status(403)
+        if(!isAdmin(req.role)) return res.status(403)
         appointmentRepository.deleteAppointment(req.params.id).then(() => {
             res.sendStatus(200)
         }).catch((err) => {

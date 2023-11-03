@@ -1,10 +1,11 @@
 const patientRepository = require('../../repositories/PatientRepository');
 const userRepository = require('../../repositories/UserRepository');
+const { isAdmin, isPatient } = require('../../utils/Authorization');
 
 class PatientController{
 
     createPatient(req, res){
-        if(req.role !== 'admin') return res.status(403)
+        if(!isAdmin(req.role)) return res.status(403)
 
         const createPatientSchema = require('./schemas/createPatientSchema')
         const errors = createPatientSchema.validate(req.body)
@@ -20,7 +21,7 @@ class PatientController{
 
     updatePatient(req, res){
         const userId = +req.params.id
-        const isAuthorized = req.role === 'admin' || (req.role === 'patient' && userId === req.uid)
+        const isAuthorized = isAdmin(req.role) || (isPatient(req.role) && isSameUser(userId,req.uid))
         if(!isAuthorized) return res.status(403)
 
         const updatePatientSchema = require('./schemas/updatePatientSchema')
@@ -36,7 +37,7 @@ class PatientController{
 
     getPatientByUserId(req, res){
         const userId = +req.params.id
-        const isAuthorized = req.role === 'admin' || (req.role === 'patient' && userId === req.uid)
+        const isAuthorized = isAdmin(req.role) || (isPatient(req.role) && isSameUser(userId,req.uid))
         if(!isAuthorized) return res.status(403)
         patientRepository.getPatientById(userId).then((patient) => {
             res.status(200).json(patient)

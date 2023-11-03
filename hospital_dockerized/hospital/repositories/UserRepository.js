@@ -1,9 +1,9 @@
 const {Filterable, Filter} = require('../utils/Filterable')
 const db = require('../utils/DBconnection')
-
+const TABLE_NAME = '"Users"'
 class UserRepository extends Filterable{
     constructor(){
-        super('"Users"')
+        super(TABLE_NAME)
     }
     addNameFilter(name, compare = "="){
         const filter = new Filter("name", compare, name)
@@ -26,7 +26,7 @@ class UserRepository extends Filterable{
     }
 
     updateUser(userid, user){
-        let updateQuery = `update "Users" set `
+        let updateQuery = `update ${TABLE_NAME} set `
         if(user.name) updateQuery += `name='${user.name}'`
         if(user.new_pass) updateQuery += (user.name? ", ": "") +`hashed_pass='${user.new_pass}'`
         updateQuery += ` where id=${userid};`
@@ -34,17 +34,17 @@ class UserRepository extends Filterable{
     }
 
     updateUserSalt(userid, salt){
-        const updateQuery = `update "Users" set token_validator='${salt}' where id=${userid};`
+        const updateQuery = `update ${TABLE_NAME} set token_validator='${salt}' where id=${userid};`
         return db.none(updateQuery)
     }
 
     deleteUser(userid){
-        const deleteQuery = `delete from "Users" where id=${userid};`
+        const deleteQuery = `delete from ${TABLE_NAME} where id=${userid};`
         return db.none(deleteQuery)
     }
 
     createUser(user){
-        const insertQuery = `insert into "Users" (name, hashed_pass, role, token_validator,created_at)
+        const insertQuery = `insert into ${TABLE_NAME} (name, hashed_pass, role, token_validator,created_at)
         values ('${user.name}', '${user.password}', '${user.role}', null, NOW()) RETURNING ID;`
         return db.oneOrNone(insertQuery)
     }

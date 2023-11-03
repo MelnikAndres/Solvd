@@ -94,8 +94,32 @@ function testAll(){
             expect(res.statusCode).toEqual(404)
         })
     })
-    
-    
+
+    describe('POST /users/admin', () => {
+        it('should create a new admin', async () => {
+            const res = await request(app)
+                .post('/users/admin')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send({
+                    name: "Andres2",
+                    password: "1234",
+                    role: "admin"
+                })
+            expect(res.statusCode).toEqual(200)
+        })
+    })
+
+    describe('GET /users/:id', () => {
+        it('should find the new admin', async () => {
+            const res = await request(app)
+                .get('/users/3')
+                .set('Cookie', [`jwt=${cookie}`])
+                .send()
+            expect(res.statusCode).toEqual(200)
+            expect(res.body).toHaveProperty('name', 'Andres2')
+            expect(res.body).toHaveProperty('role', 'admin')
+        })
+    })
     
     
 }
