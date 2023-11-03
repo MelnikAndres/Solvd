@@ -1,3 +1,4 @@
+const PatientDto = require('../dtos/PatientDto');
 const patientRepository = require('../repositories/PatientRepository')
 const userService = require('./UserService')
 
@@ -13,7 +14,9 @@ class PatientService {
     }
 
     async getPatientById(id) {
-        return await patientRepository.getPatientById(id)
+        const patient = await patientRepository.getPatientById(id)
+        if (!patient) return null
+        return new PatientDto(patient.id, patient.name, patient.email, patient.phone, patient.role)
     }
 
 }

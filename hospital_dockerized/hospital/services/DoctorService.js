@@ -1,3 +1,4 @@
+const DoctorDto = require('../dtos/DoctorDto');
 const doctorRepository = require('../repositories/DoctorRepository')
 const userService = require('./UserService')
 
@@ -13,7 +14,9 @@ class DoctorService {
     }
 
     async getDoctorByUserId(userId) {
-        return await doctorRepository.getDoctorByUserId(userId)
+        const doctor = await doctorRepository.getDoctorByUserId(userId)
+        if (!doctor) return null
+        return new DoctorDto(doctor.id, doctor.name, doctor.specialization, doctor.role)
     }
 
 }

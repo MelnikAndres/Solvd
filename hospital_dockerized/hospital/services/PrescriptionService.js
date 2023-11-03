@@ -1,4 +1,5 @@
 const prescriptionRepository = require('../repositories/PrescriptionRepository')
+const PrescriptionDto = require('../dtos/PrescriptionDto')
 
 class PrescriptionService{
 
@@ -7,7 +8,8 @@ class PrescriptionService{
     }
 
     async getPrescriptionsByPatientId(patientId){
-        return await prescriptionRepository.getPrescriptionsByPatientId(patientId)
+        const prescriptions = await prescriptionRepository.getPrescriptionsByPatientId(patientId)
+        return prescriptions.map(prescription => new PrescriptionDto(prescription.id, prescription.appointment_id, prescription.patient_id, prescription.info, prescription.medicine))
     }
 
     async updatePrescription(medicine, info, id){

@@ -1,5 +1,5 @@
 const userRepository = require('../repositories/UserRepository')
-
+const UserDto = require('../dtos/UserDto')
 class UserService {
 
     async create(name, password, role) {
@@ -11,9 +11,7 @@ class UserService {
         userRepository.addNameFilter(name)
         userRepository.addPasswordFilter(password)
         const users = await userRepository.consumeQuery()
-        const user = users[0]
-        delete user.hashed_pass
-        return user
+        return new UserDto(users[0].id,users[0].name,users[0].role)
     }
 
     async updateSalt(id, salt) {
@@ -24,11 +22,7 @@ class UserService {
         if (name) userRepository.addNameFilter(name)
         if (role) userRepository.addRoleFilter(role)
         const data = await userRepository.consumeQuery()
-        for (let i = 0; i < data.length; i++) {
-            delete data[i].hashed_pass
-            delete data[i].token_validator
-        }
-        return data
+        return data.map(user => new UserDto(user.id,user.name,user.role))
     }
 
     async createAdminUser(name, password, role) {
@@ -36,12 +30,21 @@ class UserService {
     }
 
     async getUserById(id) {
+        const user = await this.#getUser(id);
+        if(!user) return null
+        return new UserDto(user.id,user.name,user.role)
+    }
+
+    async #getUser(id){
         userRepository.addIdFilter(id)
         const data = await userRepository.consumeQuery()
         if (data.length === 0) return null
-        const user = data[0]
-        delete user.hashed_pass
-        return user
+        return data[0]
+    }
+    async getUserValidator(id) {
+        const user = await this.#getUser(id)
+        if(!user) return null
+        return user.token_validator
     }
 
     async updateUser(userId, name, new_pass) {

@@ -1,3 +1,4 @@
+const AppointmentDto = require('../dtos/AppointmentDto')
 const appointmentRepository = require('../repositories/AppointmentRepository')
 const { ID, DOCTOR_ID, PATIENT_ID, STATUS } = require('../utils/CommonProps')
 const FILTERS = [ID, DOCTOR_ID, PATIENT_ID, STATUS]
@@ -43,8 +44,8 @@ class AppointmentService {
         if (query.from || query.to) {
             appointmentRepository.addFromToFilter(query.from, query.to)
         }
-        
-        return await appointmentRepository.consumeQuery()
+        const appointments = await appointmentRepository.consumeQuery()
+        return appointments.map(appointment => new AppointmentDto(appointment.id, appointment.doctor_id, appointment.patient_id, appointment.duration_min, appointment.date, appointment.status, appointment.symptoms))
     }
 
     async deleteAppointment(id) {
