@@ -11,7 +11,9 @@ class UserService {
         userRepository.addNameFilter(name)
         userRepository.addPasswordFilter(password)
         const users = await userRepository.consumeQuery()
-        return users[0]
+        const user = users[0]
+        delete user.hashed_pass
+        return user
     }
 
     async updateSalt(id, salt) {
@@ -38,6 +40,7 @@ class UserService {
         const data = await userRepository.consumeQuery()
         if (data.length === 0) return null
         const user = data[0]
+        delete user.hashed_pass
         return user
     }
 
